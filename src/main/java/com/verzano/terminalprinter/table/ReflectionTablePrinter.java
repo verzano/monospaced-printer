@@ -1,6 +1,6 @@
-package com.verzano.util.terminalprinter.table;
+package com.verzano.terminalprinter.table;
 
-import com.verzano.util.terminalprinter.table.metrics.Padding;
+import com.verzano.terminalprinter.table.metrics.Padding;
 
 import java.io.PrintStream;
 import java.lang.reflect.Field;

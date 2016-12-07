@@ -1,4 +1,4 @@
-package com.verzano.util.terminalprinter.table.metrics;
+package com.verzano.terminalprinter.table.metrics;
 
 public class Padding {
   public int left;
