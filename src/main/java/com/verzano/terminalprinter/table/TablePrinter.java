@@ -1,6 +1,8 @@
 package com.verzano.terminalprinter.table;
 
 import com.verzano.terminalprinter.table.metrics.Padding;
+import com.verzano.terminalprinter.table.ui.GridUI;
+import com.verzano.terminalprinter.table.ui.TableUI;
 
 import java.io.PrintStream;
 import java.util.Arrays;
@@ -10,92 +12,14 @@ import java.util.Arrays;
 // TODO enforce that nHeaders and nCols are the same
 // TODO do the resizing of the table more intelligently (allow title to influence and have sizes for cells)
 // TODO allow nulls
+// TODO break into model and view
+// TODO add setters/getters and organize them
+// TODO combine some of the similar drawing logic
 public class TablePrinter {
-  // Title symbols
-  private static final char DEF_TITLE_TOP_LEFT = '\u250C';
-  private static final char DEF_TITLE_TOP_FLOOR = '\u2500';
-  private static final char DEF_TITLE_TOP_RIGHT = '\u2510';
-  private static final char DEF_TITLE_RIGHT_WALL = '\u2502';
-  private static final char DEF_TITLE_BOT_RIGHT = '\u2561';
-  private static final char DEF_TITLE_BOT_FLOOR = '\u2550';
-  private static final char DEF_TITLE_BOT_CROSS = '\u2564';
-  private static final char DEF_TITLE_BOT_LEFT = '\u255E';
-  private static final char DEF_TITLE_LEFT_WALL = '\u2502';
-
-  private char titleTopLeft = DEF_TITLE_TOP_LEFT;
-  private char titleTopFloor = DEF_TITLE_TOP_FLOOR;
-  private char titleTopRight = DEF_TITLE_TOP_RIGHT;
-  private char titleRightWall = DEF_TITLE_RIGHT_WALL;
-  private char titleBotRight = DEF_TITLE_BOT_RIGHT;
-  private char titleBotCross = DEF_TITLE_BOT_CROSS;
-  private char titleBotFloor = DEF_TITLE_BOT_FLOOR;
-  private char titleBotLeft = DEF_TITLE_BOT_LEFT;
-  private char titleLeftWall = DEF_TITLE_LEFT_WALL;
-  
-  // Header symbols
-  private static final char DEF_HEADER_TOP_LEFT = '\u250C';
-  private static final char DEF_HEADER_TOP_FLOOR = '\u2500';
-  private static final char DEF_HEADER_TOP_CROSS = '\u252C';
-  private static final char DEF_HEADER_TOP_RIGHT = '\u2510';
-  private static final char DEF_HEADER_RIGHT_WALL = '\u2502';
-  private static final char DEF_HEADER_BOT_RIGHT = '\u2561';
-  private static final char DEF_HEADER_BOT_FLOOR = '\u2550';
-  private static final char DEF_HEADER_BOT_CROSS = '\u256A';
-  private static final char DEF_HEADER_BOT_LEFT = '\u255E';
-  private static final char DEF_HEADER_LEFT_WALL = '\u2502';
-  private static final char DEF_HEADER_INNER_WALL = '\u2502';
-
-  private char headerTopLeft = DEF_HEADER_TOP_LEFT;
-  private char headerTopFloor = DEF_HEADER_TOP_FLOOR;
-  private char headerTopCross = DEF_HEADER_TOP_CROSS;
-  private char headerTopRight = DEF_HEADER_TOP_RIGHT;
-  private char headerRightWall = DEF_HEADER_RIGHT_WALL;
-  private char headerBotRight = DEF_HEADER_BOT_RIGHT;
-  private char headerBotFloor = DEF_HEADER_BOT_FLOOR;
-  private char headerBotCross = DEF_HEADER_BOT_CROSS;
-  private char headerBotLeft = DEF_HEADER_BOT_LEFT;
-  private char headerLeftWall = DEF_HEADER_LEFT_WALL;
-  private char headerInnerWall = DEF_HEADER_INNER_WALL;
-
-  // Table symbols
-  private static final char DEF_TOP_LEFT = '\u250C';
-  private static final char DEF_TOP_FLOOR = '\u2500';
-  private static final char DEF_TOP_CROSS = '\u252C';
-  private static final char DEF_TOP_RIGHT = '\u2510';
-  private static final char DEF_RIGHT_WALL = '\u2502';
-  private static final char DEF_RIGHT_CROSS = '\u2524';
-  private static final char DEF_BOT_RIGHT = '\u2518';
-  private static final char DEF_BOT_FLOOR = '\u2500';
-  private static final char DEF_BOT_CROSS = '\u2534';
-  private static final char DEF_BOT_LEFT = '\u2514';
-  private static final char DEF_LEFT_WALL = '\u2502';
-  private static final char DEF_LEFT_CROSS = '\u251C';
-  private static final char DEF_INNER_WALL = '\u2502';
-  private static final char DEF_INNER_FLOOR = '\u2500';
-  private static final char DEF_INNER_CROSS = '\u253C';
-
-  private char topLeft = DEF_TOP_LEFT;
-  private char topFloor = DEF_TOP_FLOOR;
-  private char topCross = DEF_TOP_CROSS;
-  private char topRight = DEF_TOP_RIGHT;
-  private char rightWall = DEF_RIGHT_WALL;
-  private char rightCross = DEF_RIGHT_CROSS;
-  private char botRight = DEF_BOT_RIGHT;
-  private char botFloor = DEF_BOT_FLOOR;
-  private char botCross = DEF_BOT_CROSS;
-  private char botLeft = DEF_BOT_LEFT;
-  private char leftWall = DEF_LEFT_WALL;
-  private char leftCross = DEF_LEFT_CROSS;
-  private char innerWall = DEF_INNER_WALL;
-  private char innerFloor = DEF_INNER_FLOOR;
-  private char innerCross = DEF_INNER_CROSS;
-
-  // Spacer
-  private static final char DEF_SPACE = ' ';
-
-  private char space = DEF_SPACE;
-
   private PrintStream out = System.out;
+
+  // TODO move this to the model
+  private TableUI tableUI;
 
   private Object title;
 
@@ -145,6 +69,9 @@ public class TablePrinter {
       int[] maxWidths,
       Padding pads) {
     this(rows, headers, title, minWidths, maxWidths, pads, null);
+
+    // TODO allow the actual setting of this
+    this.tableUI = new TableUI();
   }
 
   public TablePrinter(
@@ -240,150 +167,6 @@ public class TablePrinter {
     calculateRenderedSizes();
   }
 
-  public void setTitleTopLeft(char titleTopLeft) {
-    this.titleTopLeft = titleTopLeft;
-  }
-
-  public void setTitleTopFloor(char titleTopFloor) {
-    this.titleTopFloor = titleTopFloor;
-  }
-
-  public void setTitleTopRight(char titleTopRight) {
-    this.titleTopRight = titleTopRight;
-  }
-
-  public void setTitleRightWall(char titleRightWall) {
-    this.titleRightWall = titleRightWall;
-  }
-
-  public void setTitleBotRight(char titleBotRight) {
-    this.titleBotRight = titleBotRight;
-  }
-
-  public void setTitleBotCross(char titleBotCross) {
-    this.titleBotCross = titleBotCross;
-  }
-
-  public void setTitleBotFloor(char titleBotFloor) {
-    this.titleBotFloor = titleBotFloor;
-  }
-
-  public void setTitleBotLeft(char titleBotLeft) {
-    this.titleBotLeft = titleBotLeft;
-  }
-
-  public void setTitleLeftWall(char titleLeftWall) {
-    this.titleLeftWall = titleLeftWall;
-  }
-
-  public void setHeaderTopLeft(char headerTopLeft) {
-    this.headerTopLeft = headerTopLeft;
-  }
-
-  public void setHeaderTopFloor(char headerTopFloor) {
-    this.headerTopFloor = headerTopFloor;
-  }
-
-  public void setHeaderTopCross(char headerTopCross) {
-    this.headerTopCross = headerTopCross;
-  }
-
-  public void setHeaderTopRight(char headerTopRight) {
-    this.headerTopRight = headerTopRight;
-  }
-
-  public void setHeaderRightWall(char headerRightWall) {
-    this.headerRightWall = headerRightWall;
-  }
-
-  public void setHeaderBotRight(char headerBotRight) {
-    this.headerBotRight = headerBotRight;
-  }
-
-  public void setHeaderBotFloor(char headerBotFloor) {
-    this.headerBotFloor = headerBotFloor;
-  }
-
-  public void setHeaderBotCross(char headerBotCross) {
-    this.headerBotCross = headerBotCross;
-  }
-
-  public void setHeaderBotLeft(char headerBotLeft) {
-    this.headerBotLeft = headerBotLeft;
-  }
-
-  public void setHeaderLeftWall(char headerLeftWall) {
-    this.headerLeftWall = headerLeftWall;
-  }
-
-  public void setHeaderInnerWall(char headerInnerWall) {
-    this.headerInnerWall = headerInnerWall;
-  }
-
-  public void setTopLeft(char topLeft) {
-    this.topLeft = topLeft;
-  }
-
-  public void setTopFloor(char topFloor) {
-    this.topFloor = topFloor;
-  }
-
-  public void setTopCross(char topCross) {
-    this.topCross = topCross;
-  }
-
-  public void setTopRight(char topRight) {
-    this.topRight = topRight;
-  }
-
-  public void setRightWall(char rightWall) {
-    this.rightWall = rightWall;
-  }
-
-  public void setRightCross(char rightCross) {
-    this.rightCross = rightCross;
-  }
-
-  public void setBotRight(char botRight) {
-    this.botRight = botRight;
-  }
-
-  public void setBotFloor(char botFloor) {
-    this.botFloor = botFloor;
-  }
-
-  public void setBotCross(char botCross) {
-    this.botCross = botCross;
-  }
-
-  public void setBotLeft(char botLeft) {
-    this.botLeft = botLeft;
-  }
-
-  public void setLeftWall(char leftWall) {
-    this.leftWall = leftWall;
-  }
-
-  public void setLeftCross(char leftCross) {
-    this.leftCross = leftCross;
-  }
-
-  public void setInnerWall(char innerWall) {
-    this.innerWall = innerWall;
-  }
-
-  public void setInnerFloor(char innerFloor) {
-    this.innerFloor = innerFloor;
-  }
-
-  public void setInnerCross(char innerCross) {
-    this.innerCross = innerCross;
-  }
-
-  public void setSpace(char space) {
-    this.space = space;
-  }
-
   private void calculateRenderedSizes() {
     renderedTitleWidth = 0;
     renderedTitleHeight = 0;
@@ -453,7 +236,7 @@ public class TablePrinter {
                 beginIndex,
                 Math.min(dataLength, renderedColWidths[col] * (chunk + 1)));
           } else {
-            chunkedData[row][col][chunk] = space + "";
+            chunkedData[row][col][chunk] = tableUI.getCellUI().getSpace() + "";
           }
         }
       }
@@ -473,128 +256,131 @@ public class TablePrinter {
               beginIndex,
               Math.min(headerLength, renderedColWidths[head] * (chunk + 1)));
         } else {
-          chunkedHeaders[head][chunk] = space + "";
+          chunkedHeaders[head][chunk] = tableUI.getHeaderUI().getSpace() + "";
         }
       }
     }
   }
 
-  private void printLine(char left, char floor, char cross, char right) {
+  private void printTopDividerLine(GridUI gridUI) {
+    printDividerLine(
+        gridUI.getTopLeft(),
+        gridUI.getTopFloor(),
+        gridUI.getTopCross(),
+        gridUI.getTopRight());
+  }
+
+  private void printInnerDividerLine(GridUI gridUI) {
+    printDividerLine(
+        gridUI.getLeftCross(),
+        gridUI.getInnerFloor(),
+        gridUI.getInnerCross(),
+        gridUI.getRightCross());
+  }
+
+  private void printBottomDividerLine(GridUI gridUI) {
+    printDividerLine(
+        gridUI.getBotLeft(),
+        gridUI.getBotFloor(),
+        gridUI.getBotCross(),
+        gridUI.getBotRight());
+  }
+
+  private void printEmptyRows(GridUI gridUI, int numRows) {
+    for(int row = 0; row < numRows; row++) {
+      printDividerLine(
+          gridUI.getLeftWall(),
+          gridUI.getSpace(),
+          gridUI.getInnerWall(),
+          gridUI.getRightWall());
+    }
+  }
+
+  private void printDividerLine(char left, char middle, char cross, char right) {
     if (nCols > 0) {
+      int rightCol = nCols - 1;
       pr(left);
 
-      pr(floor, renderedColWidths[0] + pads.left + pads.right);
-      for (int col = 1; col < nCols; col++) {
+      for (int col = 0; col < rightCol; col++) {
         pr(cross);
-        pr(floor, renderedColWidths[col] + pads.left + pads.right);
+        pr(middle, pads.left + renderedColWidths[col] + pads.right);
       }
+
+      pr(middle, pads.left + renderedColWidths[rightCol] + pads.right);
       pr(right);
       ln();
     }
   }
   
   private void printTitle() {
-    pr(titleTopLeft);
-    pr(titleTopFloor, renderedTitleWidth + pads.left + pads.right);
-    pr(titleTopRight);
-    ln();
-    printNEmptyRows(pads.bottom, titleLeftWall, ' ', titleRightWall);
+    GridUI titleUI = tableUI.getTitleUI();
+
+    printTopDividerLine(titleUI);
+    printEmptyRows(titleUI, pads.bottom);
 
     for (int chunk = 0; chunk < renderedTitleHeight; chunk++) {
-      pr(titleLeftWall);
-      pr(space, pads.left);
+      pr(titleUI.getLeftWall());
+      pr(titleUI.getSpace(), pads.left);
 
       prf(chunkedTitle[chunk], renderedTitleWidth);
 
-      pr(space, pads.right);
-      pr(titleRightWall);
+      pr(titleUI.getSpace(), pads.right);
+      pr(titleUI.getRightWall());
 
       ln();
     }
 
-    printNEmptyRows(pads.bottom, titleLeftWall, ' ', titleRightWall);
-    printLine(titleBotLeft, titleBotFloor, titleBotCross, titleBotRight);
+    printEmptyRows(titleUI, pads.bottom);
+    printBottomDividerLine(titleUI);
   }
 
   private void printHeaders(boolean printTop) {
+    GridUI headerUI = tableUI.getHeaderUI();
+
     if (printTop) {
-      printLine(headerTopLeft, headerTopFloor, headerTopCross, headerTopRight);
+      printTopDividerLine(headerUI);
     }
-    printNEmptyRows(pads.bottom, headerLeftWall, headerInnerWall, headerRightWall);
+    printEmptyRows(headerUI, pads.bottom);
     int rightCol = nCols - 1;
     for (int chunk = 0; chunk < renderedHeaderHeight; chunk++) {
       for (int col = 0; col < nCols; col++) {
         if (col == 0) {
-          pr(headerLeftWall);
+          pr(headerUI.getLeftWall());
         }
-        pr(space, pads.left);
+        pr(headerUI.getSpace(), pads.left);
 
         prf(chunkedHeaders[col][chunk], renderedColWidths[col]);
 
-        pr(space, pads.right);
+        pr(headerUI.getSpace(), pads.right);
         if (col == rightCol) {
-          pr(headerRightWall);
+          pr(headerUI.getRightWall());
         } else {
-          pr(headerInnerWall);
+          pr(headerUI.getInnerWall());
         }
       }
       ln();
     }
-    printNEmptyRows(pads.bottom, headerLeftWall, headerInnerWall, headerRightWall);
-    printLine(headerBotLeft, headerBotFloor, headerBotCross, headerBotRight);
+    printEmptyRows(headerUI, pads.bottom);
+    printBottomDividerLine(headerUI);
   }
 
-  private void printTop() {
-    printLine(topLeft, topFloor, topCross, topRight);
-  }
-
-  private void printRowSeparator() {
-    printLine(leftCross, innerFloor, innerCross, rightCross);
-  }
-
-  private void printBottom() {
-    printLine(botLeft, botFloor, botCross, botRight);
-  }
-
-  private void printRow(int row, char left, char middle, char right) {
+  private void printRow(GridUI gridUI, int row) {
     int rightCol = nCols - 1;
 
     for (int chunk = 0; chunk < renderedRowHeights[row]; chunk++) {
       for (int col = 0; col < nCols; col++) {
         if (col == 0) {
-          pr(left);
+          pr(gridUI.getLeftWall());
         }
-        pr(space, pads.left);
+        pr(gridUI.getSpace(), pads.left);
 
         prf(chunkedData[row][col][chunk], renderedColWidths[col]);
 
-        pr(space, pads.right);
+        pr(gridUI.getSpace(), pads.right);
         if (col == rightCol) {
-          pr(right);
+          pr(gridUI.getRightWall());
         } else {
-          pr(middle);
-        }
-      }
-      ln();
-    }
-  }
-
-  private void printNEmptyRows(int nEmptyRows, char left, char middle, char right) {
-    for(int row = 0; row < nEmptyRows; row++) {
-      int rightCol = nCols - 1;
-      for (int col = 0; col < nCols; col++) {
-        if (col == 0) {
-          pr(left);
-        }
-        pr(space, pads.left);
-
-        prf(space, renderedColWidths[col]);
-
-        pr(space, pads.right);
-        if (col == rightCol) {
-          pr(right);
-        } else {
-          pr(middle);
+          pr(gridUI.getInnerWall());
         }
       }
       ln();
@@ -602,6 +388,7 @@ public class TablePrinter {
   }
 
   public void print() {
+    GridUI cellUI = tableUI.getCellUI();
     int bottomRow = nRows - 1;
     for (int row = 0; row < nRows; row++) {
       if (row == 0) {
@@ -613,16 +400,16 @@ public class TablePrinter {
         } else if (headers != null) {
           printHeaders(true);
         } else {
-          printTop();
+          printTopDividerLine(cellUI);
         }
       } else {
-        printRowSeparator();
+        printInnerDividerLine(cellUI);
       }
-      printNEmptyRows(pads.top, leftWall, innerWall, rightWall);
-      printRow(row, leftWall, innerWall, rightWall);
-      printNEmptyRows(pads.bottom, leftWall, innerWall, rightWall);
+      printEmptyRows(cellUI, pads.top);
+      printRow(cellUI, row);
+      printEmptyRows(cellUI, pads.bottom);
       if(row == bottomRow) {
-        printBottom();
+        printBottomDividerLine(cellUI);
       }
     }
   }
