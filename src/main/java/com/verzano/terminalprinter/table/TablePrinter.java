@@ -16,7 +16,7 @@ import java.util.Arrays;
 // TODO add setters/getters and organize them
 // TODO combine some of the similar drawing logic
 public class TablePrinter {
-  private PrintStream out = System.out;
+  private PrintStream out;
 
   // TODO move this to the model
   private TableUI tableUI;
@@ -39,26 +39,26 @@ public class TablePrinter {
   private int renderedTitleHeight;
   private int renderedHeaderHeight;
   private int[] renderedColWidths;
-  private int[] renderedRowHeights;
-
   private String[] chunkedTitle;
+
+  private int[] renderedRowHeights;
   private String[][] chunkedHeaders;
   private String[][][] chunkedData;
 
   public TablePrinter() {
-    this(null, null, null, null, null, null, null);
+    this(null, null, null, null, null, null, null, null);
   }
 
   public TablePrinter(Object[][] rows) {
-    this(rows, null, null, null, null, null, null);
+    this(rows, null, null, null, null, null, null, null);
   }
 
   public TablePrinter(Object[][] rows, Object[] headers) {
-    this(rows, headers, null, null, null, null, null);
+    this(rows, headers, null, null, null, null, null, null);
   }
 
   public TablePrinter(Object[][] rows, Object[] headers, Object title) {
-    this(rows, headers, title, null, null, null, null);
+    this(rows, headers, title, null, null, null, null, null);
   }
 
   public TablePrinter(
@@ -68,10 +68,7 @@ public class TablePrinter {
       int[] minWidths,
       int[] maxWidths,
       Padding pads) {
-    this(rows, headers, title, minWidths, maxWidths, pads, null);
-
-    // TODO allow the actual setting of this
-    this.tableUI = new TableUI();
+    this(rows, headers, title, minWidths, maxWidths, pads, null,  null);
   }
 
   public TablePrinter(
@@ -81,7 +78,11 @@ public class TablePrinter {
       int[] minWidths,
       int[] maxWidths,
       Padding pads,
+      TableUI tableUI,
       PrintStream out) {
+    // TODO allow the actual setting of this
+    this.tableUI = tableUI == null ? new TableUI() : tableUI;
+
     this.out = out == null ? System.out : out;
 
     this.rows = rows;
@@ -175,7 +176,7 @@ public class TablePrinter {
 
     for (int row = 0; row < nRows; row++) {
       for (int col = 0; col < nCols; col++) {
-        int dataWidth = rows[row][col].toString().length();
+        int dataWidth = rows[row][col] == null ? 0 : rows[row][col].toString().length();
 
         int width = Math.max(
             minWidths[col],
@@ -190,7 +191,8 @@ public class TablePrinter {
 
     renderedHeaderHeight = 0;
     for (int head = 0; head < nHeaders; head++) {
-      int headerWidth = headers[head].toString().length();
+      int headerWidth = headers[head] == null ? 0 : headers[head].toString().length();
+
       int width = Math.max(
           minWidths[head],
           Math.min(maxWidths[head], headerWidth));
@@ -226,9 +228,9 @@ public class TablePrinter {
       for (int col = 0; col < nCols; col++) {
         chunkedData[row][col] = new String[renderedRowHeights[row]];
 
-        String data = rows[row][col].toString();
-        int dataLength = data.length();
         for (int chunk = 0; chunk < renderedRowHeights[row]; chunk++) {
+          String data = rows[row][col].toString();
+          int dataLength = data.length();
           int beginIndex = renderedColWidths[col] * chunk;
 
           if (beginIndex < dataLength) {
@@ -246,9 +248,9 @@ public class TablePrinter {
     for (int head = 0; head < nHeaders; head++) {
       chunkedHeaders[head] = new String[renderedHeaderHeight];
 
-      String header = headers[head].toString();
-      int headerLength = header.length();
       for (int chunk = 0; chunk < renderedHeaderHeight; chunk++) {
+        String header = headers[head].toString();
+        int headerLength = header.length();
         int beginIndex = renderedColWidths[head] * chunk;
 
         if (beginIndex < headerLength) {
@@ -302,8 +304,8 @@ public class TablePrinter {
       pr(left);
 
       for (int col = 0; col < rightCol; col++) {
-        pr(cross);
         pr(middle, pads.left + renderedColWidths[col] + pads.right);
+        pr(cross);
       }
 
       pr(middle, pads.left + renderedColWidths[rightCol] + pads.right);

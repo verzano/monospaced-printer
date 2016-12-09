@@ -1,6 +1,7 @@
 package com.verzano.terminalprinter.table;
 
 import com.verzano.terminalprinter.table.metrics.Padding;
+import com.verzano.terminalprinter.table.ui.TableUI;
 
 import java.io.PrintStream;
 import java.lang.reflect.Field;
@@ -9,15 +10,15 @@ import java.util.Collection;
 
 public class ReflectionTablePrinter extends TablePrinter {
   public ReflectionTablePrinter() {
-    this(null, null, null, null, null, null);
+    this(null, null, null, null, null, null, null);
   }
 
   public ReflectionTablePrinter(Collection<?> rows) {
-    this(rows, null, null, null, null, null);
+    this(rows, null, null, null, null, null, null);
   }
 
   public ReflectionTablePrinter(Collection<?> rows, Object title) {
-    this(rows, title, null, null, null, null);
+    this(rows, title, null, null, null, null, null);
   }
 
   public ReflectionTablePrinter(
@@ -26,8 +27,9 @@ public class ReflectionTablePrinter extends TablePrinter {
       int[] minWidths,
       int[] maxWidths,
       Padding pads,
+      TableUI tableUI,
       PrintStream out) {
-    super(null, null, null, minWidths, maxWidths, pads, out);
+    super(null, null, null, minWidths, maxWidths, pads, tableUI, out);
     setRows(rows);
     setTitle(title);
   }
