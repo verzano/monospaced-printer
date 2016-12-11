@@ -11,7 +11,6 @@ import java.util.Arrays;
 // TODO add styling
 // TODO enforce that nHeaders and nCols are the same
 // TODO do the resizing of the table more intelligently (allow title to influence and have sizes for cells)
-// TODO allow nulls
 // TODO break into model and view
 // TODO add setters/getters and organize them
 // TODO combine some of the similar drawing logic
@@ -87,10 +86,15 @@ public class TablePrinter {
 
     this.rows = rows;
     nRows = rows == null ? 0 : rows.length;
-    nCols = rows == null ? 0 : rows[0].length;
+    nCols = nRows == 0 ? 0 : rows[0].length;
 
     this.headers = headers;
     nHeaders = headers == null ? 0 : headers.length;
+
+    if (nRows != 0 && nHeaders != 0 && nHeaders != nCols) {
+      throw new IllegalArgumentException("Mismatched number of headers and columns:"
+          + " " + nHeaders + " headers " + nCols + " columns ");
+    }
     
     this.title = title;
 

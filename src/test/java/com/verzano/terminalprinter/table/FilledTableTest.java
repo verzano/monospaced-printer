@@ -8,44 +8,44 @@ import static org.junit.Assert.assertEquals;
 
 public class FilledTableTest {
   @Test
-  public void createFilled1x1Table() throws Exception {
-    String empty1x1Table = getTestResourceAsString("table/filled/Filled1x1Table.txt");
+  public void createTable1x1Filled() throws Exception {
+    String table1x1Filled = getTestResourceAsString("table/filled/Table1x1Filled.txt");
     String printedTable = printTableAsString(new TablePrinter(new Object[][]{
         {1}
     }));
 
-    assertEquals(empty1x1Table, printedTable);
+    assertEquals(table1x1Filled, printedTable);
   }
 
   @Test
-  public void createFilled1x2Table() throws Exception {
-    String filled1x1Table = getTestResourceAsString("table/filled/Filled1x2Table.txt");
+  public void createTable1x2Filled() throws Exception {
+    String table1x2Filled = getTestResourceAsString("table/filled/Table1x2Filled.txt");
     String printedTable = printTableAsString(new TablePrinter(new Object[][]{
         {1, 2}
     }));
 
-    assertEquals(filled1x1Table, printedTable);
+    assertEquals(table1x2Filled, printedTable);
   }
 
   @Test
-  public void createFilled2x1Table() throws Exception {
-    String filled1x1Table = getTestResourceAsString("table/filled/Filled2x1Table.txt");
+  public void createTable2x1Filled() throws Exception {
+    String table2x1Filled = getTestResourceAsString("table/filled/Table2x1Filled.txt");
     String printedTable = printTableAsString(new TablePrinter(new Object[][]{
         {1},
         {2}
     }));
 
-    assertEquals(filled1x1Table, printedTable);
+    assertEquals(table2x1Filled, printedTable);
   }
 
   @Test
-  public void createFilled2x2Table() throws Exception {
-    String filled1x1Table = getTestResourceAsString("table/filled/Filled2x2Table.txt");
+  public void createTable2x2Filled() throws Exception {
+    String table2x2Filled = getTestResourceAsString("table/filled/Table2x2Filled.txt");
     String printedTable = printTableAsString(new TablePrinter(new Object[][]{
         {1, 2},
         {3, 4}
     }));
 
-    assertEquals(filled1x1Table, printedTable);
+    assertEquals(table2x2Filled, printedTable);
   }
 }

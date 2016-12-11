@@ -8,44 +8,52 @@ import static org.junit.Assert.assertEquals;
 
 public class EmptyTableTest {
   @Test
-  public void createEmpty1x1Table() throws Exception {
-    String empty1x1Table = getTestResourceAsString("table/empty/Empty1x1Table.txt");
+  public void createTable0x0Empty() throws Exception {
+    String table0x0Empty = getTestResourceAsString("table/empty/Table0x0Empty.txt");
+    String printedTable = printTableAsString(new TablePrinter(new Object[][]{}));
+
+    assertEquals(table0x0Empty, printedTable);
+  }
+
+  @Test
+  public void createTable1x1Empty() throws Exception {
+    String table1x1Empty = getTestResourceAsString("table/empty/Table1x1Empty.txt");
     String printedTable = printTableAsString(new TablePrinter(new Object[][]{
         {null}
     }));
 
-    assertEquals(empty1x1Table, printedTable);
+    assertEquals(table1x1Empty, printedTable);
   }
 
   @Test
-  public void createEmpty1x2Table() throws Exception {
-    String empty1x1Table = getTestResourceAsString("table/empty/Empty1x2Table.txt");
+  public void createTable1x2Empty() throws Exception {
+    String table1x2Empty = getTestResourceAsString("table/empty/Table1x2Empty.txt");
     String printedTable = printTableAsString(new TablePrinter(new Object[][]{
         {null, null}
     }));
 
-    assertEquals(empty1x1Table, printedTable);
+    assertEquals(table1x2Empty, printedTable);
   }
 
   @Test
-  public void createEmpty2x1Table() throws Exception {
-    String empty1x1Table = getTestResourceAsString("table/empty/Empty2x1Table.txt");
+  public void createTable2x1Empty() throws Exception {
+    String table2x1Empty = getTestResourceAsString("table/empty/Table2x1Empty.txt");
     String printedTable = printTableAsString(new TablePrinter(new Object[][]{
         {null},
         {null}
     }));
 
-    assertEquals(empty1x1Table, printedTable);
+    assertEquals(table2x1Empty, printedTable);
   }
 
   @Test
-  public void createEmpty2x2Table() throws Exception {
-    String empty1x1Table = getTestResourceAsString("table/empty/Empty2x2Table.txt");
+  public void createTable2x2Empty() throws Exception {
+    String table2x2Empty = getTestResourceAsString("table/empty/Table2x2Empty.txt");
     String printedTable = printTableAsString(new TablePrinter(new Object[][]{
         {null, null},
         {null, null}
     }));
 
-    assertEquals(empty1x1Table, printedTable);
+    assertEquals(table2x2Empty, printedTable);
   }
 }
