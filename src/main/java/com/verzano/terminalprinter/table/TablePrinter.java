@@ -1,40 +1,24 @@
 package com.verzano.terminalprinter.table;
 
-import com.verzano.terminalprinter.table.metrics.Padding;
 import com.verzano.terminalprinter.table.metrics.Size;
-import com.verzano.terminalprinter.table.ui.GridUI;
-import com.verzano.terminalprinter.table.ui.TableUI;
+import com.verzano.terminalprinter.table.model.TablePrinterModel;
+import com.verzano.terminalprinter.table.view.TablePrinterView;
+import com.verzano.terminalprinter.table.view.ui.GridUI;
 
 import java.io.PrintStream;
 import java.util.Arrays;
 
 // TODO add colors
 // TODO add styling
-// TODO do the resizing of the table more intelligently (allow title to influence and have sizes for cells)
 // TODO break into model and view
 // TODO add setters/getters and organize them
 // TODO combine some of the similar drawing logic
 public class TablePrinter {
   private PrintStream out;
 
-  private TableUI tableUI;
+  private TablePrinterModel model;
 
-  private Object title;
-  private boolean showTitle;
-
-  private Object[] headers;
-  private int nHeaders;
-  private Size[] minHeaderSizes;
-  private Size[] maxHeaderSizes;
-  private boolean showHeaders;
-
-  private Object[][] rows;
-  private int nCols;
-  private int nRows;
-  private Size[][] minSizes;
-  private Size[][] maxSizes;
-
-  private Padding pads;
+  private TablePrinterView view;
 
   private Size renderedTitleSize;
 
@@ -49,101 +33,13 @@ public class TablePrinter {
   private String[][] chunkedHeaders;
   private String[][][] chunkedData;
 
-  public TablePrinter() {
-    this(null, null, null, null, null, null, null, null, null, null);
-  }
-
-  public TablePrinter(Object[][] rows) {
-    this(rows, null, null, null, null, null, null, null, null, null);
-  }
-
-  public TablePrinter(Object[][] rows, Object[] headers) {
-    this(rows, headers, null, null, null, null, null, null, null, null);
-  }
-
-  public TablePrinter(Object[][] rows, Object[] headers, Object title) {
-    this(rows, headers, title, null, null, null, null, null, null, null);
-  }
-
   public TablePrinter(
-      Object[][] rows,
-      Object[] headers,
-      Object title,
-      Size[][] minSizes,
-      Size[][] maxSizes,
-      Padding pads) {
-    this(rows, headers, title, minSizes, maxSizes, null, null, pads, null,  null);
-  }
-
-  public TablePrinter(
-      Object[][] rows,
-      Object[] headers,
-      Object title,
-      Size[][] minSizes,
-      Size[][] maxSizes,
-      Size[] minHeaderSizes,
-      Size[] maxHeaderSizes,
-      Padding pads,
-      TableUI tableUI,
+      TablePrinterModel model,
+      TablePrinterView view,
       PrintStream out) {
-    this.tableUI = tableUI == null ? new TableUI() : tableUI;
-
+    this.model = model == null ? new TablePrinterModel() : model;
+    this.view = view == null ? new TablePrinterView(this.model) : view;
     this.out = out == null ? System.out : out;
-
-    this.rows = rows;
-    nRows = rows == null ? 0 : rows.length;
-    nCols = nRows == 0 ? 0 : rows[0].length;
-
-    if (minSizes == null) {
-      minSizes = new Size[nRows][nCols];
-      for (int row = 0; row < nRows; row++) {
-        for (int col = 0; col < nCols; col++) {
-          minSizes[row][col] = new Size(0, 0);
-        }
-      }
-    }
-    this.minSizes = minSizes;
-
-    if (maxSizes == null) {
-      maxSizes = new Size[nRows][nCols];
-      for (int row = 0; row < nRows; row++) {
-        for (int col = 0; col < nCols; col++) {
-          maxSizes[row][col] = new Size(Integer.MAX_VALUE, Integer.MAX_VALUE);
-        }
-      }
-    }
-    this.maxSizes = maxSizes;
-
-    this.headers = headers;
-    nHeaders = headers == null ? 0 : headers.length;
-
-    if (nRows != 0 && nHeaders != 0 && nHeaders != nCols) {
-      throw new IllegalArgumentException("Mismatched number of headers and columns:"
-          + " " + nHeaders + " headers " + nCols + " columns ");
-    }
-
-    showHeaders = headers != null;
-
-    if (minHeaderSizes == null) {
-      minHeaderSizes = new Size[nHeaders];
-      for (int header = 0; header < nHeaders; header++) {
-        minHeaderSizes[header] = new Size(0, 0);
-      }
-    }
-    this.minHeaderSizes = minHeaderSizes;
-
-    if (maxHeaderSizes == null) {
-      maxHeaderSizes = new Size[nHeaders];
-      for (int header = 0; header < nHeaders; header++) {
-        maxHeaderSizes[header] = new Size(Integer.MAX_VALUE, Integer.MAX_VALUE);
-      }
-    }
-    this.maxHeaderSizes = maxHeaderSizes;
-    
-    this.title = title;
-    showTitle = title != null;
-
-    this.pads = pads == null ? new Padding(0, 0, 0, 0) : pads;
 
     calculateRenderedSizes();
   }
@@ -158,22 +54,27 @@ public class TablePrinter {
 
   private void calculateRenderedSizes() {
     renderedTitleSize = new Size();
+    
+    int nHeaders = model.headerCount();
     renderedHeaderSizes = new Size[nHeaders];
+    
+    int nRows = model.rowCount();
+    int nCols = model.columnCount();
     renderedDataSizes = new Size[nRows][nCols];
     renderedRowHeights = new int[nRows];
     renderedColWidths = new int[nCols];
 
     for (int row = 0; row < nRows; row++) {
       for (int col = 0; col < nCols; col++) {
-        int dataWidth = rows[row][col] == null ? 0 : rows[row][col].toString().length();
+        int dataWidth = model.dataWidthAt(row, col);
 
         int width = Math.max(
-            minSizes[row][col].width,
-            Math.min(maxSizes[row][col].width, dataWidth));
+            view.minWidthAt(row, col),
+            Math.min(view.maxWidthAt(row, col), dataWidth));
 
         int height = Math.max(
-            minSizes[row][col].height,
-            Math.min(maxSizes[row][col].height, (int)Math.ceil(dataWidth/(double)width)));
+            view.minHeightAt(row, col),
+            Math.min(view.maxHeightAt(row, col), (int)Math.ceil(dataWidth/(double)width)));
 
         renderedDataSizes[row][col] = new Size(width, height);
         renderedColWidths[col] = Math.max(renderedColWidths[col], width);
@@ -181,17 +82,17 @@ public class TablePrinter {
       }
     }
 
-    if (showHeaders) {
+    if (view.isShowHeaders()) {
       for (int header = 0; header < nHeaders; header++) {
-        int headerWidth = headers[header] == null ? 0 : headers[header].toString().length();
+        int headerWidth = model.headerWidthAt(header);
 
         int width = Math.max(
-            minHeaderSizes[header].width,
-            Math.min(maxHeaderSizes[header].width, headerWidth));
+            view.minHeaderWidthAt(header),
+            Math.min(view.maxHeaderWidthAt(header), headerWidth));
         
         int height = Math.max(
-            minHeaderSizes[header].height,
-            Math.min(maxHeaderSizes[header].width, (int)Math.ceil(headerWidth/(double) width)));
+            view.minHeaderHeightAt(header),
+            Math.min(view.maxHeaderHeightAt(header), (int)Math.ceil(headerWidth/(double) width)));
         
         renderedHeaderSizes[header] = new Size(width, height);
         renderedColWidths[header] = Math.max(renderedColWidths[header], width);
@@ -199,23 +100,22 @@ public class TablePrinter {
       }
     }
 
-    if (showTitle) {
+    if (view.isShowTitle()) {
       renderedTitleSize.width = Arrays.stream(renderedColWidths).sum()
           + nCols - 1
-          + pads.left * (nCols - 1)
-          + pads.right * (nCols - 1);
+          + view.getPads().left * (nCols - 1)
+          + view.getPads().right * (nCols - 1);
 
-      String titleString = title.toString();
-      int titleLength = titleString.length();
+      int titleWidth = model.titleWidth();
 
-      renderedTitleSize.height = (int)Math.ceil(titleLength/(double)renderedTitleSize.width);
+      renderedTitleSize.height = (int)Math.ceil(titleWidth/(double)renderedTitleSize.width);
 
       chunkedTitle = new String[renderedTitleSize.height];
       for (int chunk = 0; chunk < renderedTitleSize.height; chunk++) {
         int beginIndex = renderedTitleSize.width * chunk;
-        chunkedTitle[chunk] = titleString.substring(
+        chunkedTitle[chunk] = model.getTitle().toString().substring(
             beginIndex,
-            Math.min(titleLength, renderedTitleSize.width * (chunk + 1)));
+            Math.min(titleWidth, renderedTitleSize.width * (chunk + 1)));
       }
     }
 
@@ -225,7 +125,7 @@ public class TablePrinter {
         chunkedData[row][col] = new String[renderedRowHeights[row]];
 
         for (int chunk = 0; chunk < renderedRowHeights[row]; chunk++) {
-          String data = rows[row][col].toString();
+          String data = model.dataAt(row, col).toString();
           int dataLength = data.length();
           int beginIndex = renderedColWidths[col] * chunk;
 
@@ -234,7 +134,7 @@ public class TablePrinter {
                 beginIndex,
                 Math.min(dataLength, renderedColWidths[col] * (chunk + 1)));
           } else {
-            chunkedData[row][col][chunk] = tableUI.getCellUI().getSpace() + "";
+            chunkedData[row][col][chunk] = view.cellUI().getSpace() + "";
           }
         }
       }
@@ -245,7 +145,7 @@ public class TablePrinter {
       chunkedHeaders[head] = new String[renderedHeaderHeight];
 
       for (int chunk = 0; chunk < renderedHeaderHeight; chunk++) {
-        String header = headers[head].toString();
+        String header = model.headerAt(head).toString();
         int headerLength = header.length();
         int beginIndex = renderedColWidths[head] * chunk;
 
@@ -254,7 +154,7 @@ public class TablePrinter {
               beginIndex,
               Math.min(headerLength, renderedColWidths[head] * (chunk + 1)));
         } else {
-          chunkedHeaders[head][chunk] = tableUI.getHeaderUI().getSpace() + "";
+          chunkedHeaders[head][chunk] = view.headerUI().getSpace() + "";
         }
       }
     }
@@ -295,61 +195,61 @@ public class TablePrinter {
   }
 
   private void printDividerLine(char left, char middle, char cross, char right) {
-    if (nCols > 0) {
-      int rightCol = nCols - 1;
+    if (model.columnCount() > 0) {
+      int rightCol = model.columnCount() - 1;
       pr(left);
 
       for (int col = 0; col < rightCol; col++) {
-        pr(middle, pads.left + renderedColWidths[col] + pads.right);
+        pr(middle, view.getPads().left + renderedColWidths[col] + view.getPads().right);
         pr(cross);
       }
 
-      pr(middle, pads.left + renderedColWidths[rightCol] + pads.right);
+      pr(middle, view.getPads().left + renderedColWidths[rightCol] + view.getPads().right);
       pr(right);
       ln();
     }
   }
   
   private void printTitle() {
-    GridUI titleUI = tableUI.getTitleUI();
+    GridUI titleUI = view.titleUI();
 
     printTopDividerLine(titleUI);
-    printEmptyRows(titleUI, pads.bottom);
+    printEmptyRows(titleUI, view.getPads().bottom);
 
     for (int chunk = 0; chunk < renderedTitleSize.height; chunk++) {
       pr(titleUI.getLeftWall());
-      pr(titleUI.getSpace(), pads.left);
+      pr(titleUI.getSpace(), view.getPads().left);
 
       prf(chunkedTitle[chunk], renderedTitleSize.width);
 
-      pr(titleUI.getSpace(), pads.right);
+      pr(titleUI.getSpace(), view.getPads().right);
       pr(titleUI.getRightWall());
 
       ln();
     }
 
-    printEmptyRows(titleUI, pads.bottom);
+    printEmptyRows(titleUI, view.getPads().bottom);
     printBottomDividerLine(titleUI);
   }
 
   private void printHeaders() {
-    GridUI headerUI = tableUI.getHeaderUI();
+    GridUI headerUI = view.headerUI();
 
-    if (!showTitle) {
+    if (!view.isShowTitle()) {
       printTopDividerLine(headerUI);
     }
-    printEmptyRows(headerUI, pads.bottom);
-    int rightCol = nCols - 1;
+    printEmptyRows(headerUI, view.getPads().bottom);
+    int rightCol = model.columnCount() - 1;
     for (int chunk = 0; chunk < renderedHeaderHeight; chunk++) {
-      for (int col = 0; col < nCols; col++) {
+      for (int col = 0; col < model.columnCount(); col++) {
         if (col == 0) {
           pr(headerUI.getLeftWall());
         }
-        pr(headerUI.getSpace(), pads.left);
+        pr(headerUI.getSpace(), view.getPads().left);
 
         prf(chunkedHeaders[col][chunk], renderedHeaderSizes[col].width);
 
-        pr(headerUI.getSpace(), pads.right);
+        pr(headerUI.getSpace(), view.getPads().right);
         if (col == rightCol) {
           pr(headerUI.getRightWall());
         } else {
@@ -358,19 +258,19 @@ public class TablePrinter {
       }
       ln();
     }
-    printEmptyRows(headerUI, pads.bottom);
+    printEmptyRows(headerUI, view.getPads().bottom);
     printBottomDividerLine(headerUI);
   }
 
   private void printRow(GridUI gridUI, int row) {
-    int rightCol = nCols - 1;
+    int rightCol = model.columnCount() - 1;
 
     for (int chunk = 0; chunk < renderedRowHeights[row]; chunk++) {
-      for (int col = 0; col < nCols; col++) {
+      for (int col = 0; col < model.columnCount(); col++) {
         if (col == 0) {
           pr(gridUI.getLeftWall());
         }
-        pr(gridUI.getSpace(), pads.left);
+        pr(gridUI.getSpace(), view.getPads().left);
 
         if (chunk >= renderedDataSizes[row][col].height) {
           prf(gridUI.getSpace(), renderedDataSizes[row][col].width);
@@ -378,7 +278,7 @@ public class TablePrinter {
           prf(chunkedData[row][col][chunk], renderedDataSizes[row][col].width);
         }
 
-        pr(gridUI.getSpace(), pads.right);
+        pr(gridUI.getSpace(), view.getPads().right);
         if (col == rightCol) {
           pr(gridUI.getRightWall());
         } else {
@@ -390,28 +290,30 @@ public class TablePrinter {
   }
 
   public void print() {
-    GridUI cellUI = tableUI.getCellUI();
-    int bottomRow = nRows - 1;
-    for (int row = 0; row < nRows; row++) {
-      if (row == 0) {
-        if (showTitle) {
-          printTitle();
-          if (showHeaders) {
-            printHeaders();
-          }
-        } else if (showHeaders) {
+    int rowCount = model.rowCount();
+    if (rowCount > 0) {
+      GridUI cellUI = view.cellUI();
+      if (view.isShowTitle()) {
+        printTitle();
+        if (view.isShowHeaders()) {
           printHeaders();
-        } else {
-          printTopDividerLine(cellUI);
         }
+      } else if (view.isShowHeaders()) {
+        printHeaders();
       } else {
-        printInnerDividerLine(cellUI);
+        printTopDividerLine(cellUI);
       }
-      printEmptyRows(cellUI, pads.top);
-      printRow(cellUI, row);
-      printEmptyRows(cellUI, pads.bottom);
-      if(row == bottomRow) {
-        printBottomDividerLine(cellUI);
+
+      int bottomRow = rowCount - 1;
+      for (int row = 0; row < rowCount; row++) {
+        printEmptyRows(cellUI, view.getPads().top);
+        printRow(cellUI, row);
+        printEmptyRows(cellUI, view.getPads().bottom);
+        if (row == bottomRow) {
+          printBottomDividerLine(cellUI);
+        } else {
+          printInnerDividerLine(cellUI);
+        }
       }
     }
   }

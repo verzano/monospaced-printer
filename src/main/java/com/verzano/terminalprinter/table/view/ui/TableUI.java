@@ -1,4 +1,4 @@
-package com.verzano.terminalprinter.table.ui;
+package com.verzano.terminalprinter.table.view.ui;
 
 public class TableUI {
   private static final char DEF_TITLE_TOP_LEFT = '\u250C';

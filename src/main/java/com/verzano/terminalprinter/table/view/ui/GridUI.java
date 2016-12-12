@@ -1,4 +1,4 @@
-package com.verzano.terminalprinter.table.ui;
+package com.verzano.terminalprinter.table.view.ui;
 
 // TODO add colors
 // TODO make the getters return colors as well???
