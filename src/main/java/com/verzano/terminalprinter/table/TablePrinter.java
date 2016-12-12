@@ -1,6 +1,7 @@
 package com.verzano.terminalprinter.table;
 
 import com.verzano.terminalprinter.table.metrics.Padding;
+import com.verzano.terminalprinter.table.metrics.Size;
 import com.verzano.terminalprinter.table.ui.GridUI;
 import com.verzano.terminalprinter.table.ui.TableUI;
 
@@ -9,7 +10,6 @@ import java.util.Arrays;
 
 // TODO add colors
 // TODO add styling
-// TODO enforce that nHeaders and nCols are the same
 // TODO do the resizing of the table more intelligently (allow title to influence and have sizes for cells)
 // TODO break into model and view
 // TODO add setters/getters and organize them
@@ -17,69 +17,75 @@ import java.util.Arrays;
 public class TablePrinter {
   private PrintStream out;
 
-  // TODO move this to the model
   private TableUI tableUI;
 
   private Object title;
+  private boolean showTitle;
 
   private Object[] headers;
   private int nHeaders;
+  private Size[] minHeaderSizes;
+  private Size[] maxHeaderSizes;
+  private boolean showHeaders;
 
   private Object[][] rows;
   private int nCols;
   private int nRows;
-
-  private int[] minWidths;
-  private int[] maxWidths;
+  private Size[][] minSizes;
+  private Size[][] maxSizes;
 
   private Padding pads;
 
-  private int renderedTitleWidth;
-  private int renderedTitleHeight;
-  private int renderedHeaderHeight;
-  private int[] renderedColWidths;
-  private String[] chunkedTitle;
+  private Size renderedTitleSize;
 
+  private Size[] renderedHeaderSizes;
+  private int renderedHeaderHeight;
+
+  private Size[][] renderedDataSizes;
   private int[] renderedRowHeights;
+  private int[] renderedColWidths;
+
+  private String[] chunkedTitle;
   private String[][] chunkedHeaders;
   private String[][][] chunkedData;
 
   public TablePrinter() {
-    this(null, null, null, null, null, null, null, null);
+    this(null, null, null, null, null, null, null, null, null, null);
   }
 
   public TablePrinter(Object[][] rows) {
-    this(rows, null, null, null, null, null, null, null);
+    this(rows, null, null, null, null, null, null, null, null, null);
   }
 
   public TablePrinter(Object[][] rows, Object[] headers) {
-    this(rows, headers, null, null, null, null, null, null);
+    this(rows, headers, null, null, null, null, null, null, null, null);
   }
 
   public TablePrinter(Object[][] rows, Object[] headers, Object title) {
-    this(rows, headers, title, null, null, null, null, null);
+    this(rows, headers, title, null, null, null, null, null, null, null);
   }
 
   public TablePrinter(
       Object[][] rows,
       Object[] headers,
       Object title,
-      int[] minWidths,
-      int[] maxWidths,
+      Size[][] minSizes,
+      Size[][] maxSizes,
       Padding pads) {
-    this(rows, headers, title, minWidths, maxWidths, pads, null,  null);
+    this(rows, headers, title, minSizes, maxSizes, null, null, pads, null,  null);
   }
 
   public TablePrinter(
       Object[][] rows,
       Object[] headers,
       Object title,
-      int[] minWidths,
-      int[] maxWidths,
+      Size[][] minSizes,
+      Size[][] maxSizes,
+      Size[] minHeaderSizes,
+      Size[] maxHeaderSizes,
       Padding pads,
       TableUI tableUI,
       PrintStream out) {
-    // TODO allow the actual setting of this
     this.tableUI = tableUI == null ? new TableUI() : tableUI;
 
     this.out = out == null ? System.out : out;
@@ -88,6 +94,26 @@ public class TablePrinter {
     nRows = rows == null ? 0 : rows.length;
     nCols = nRows == 0 ? 0 : rows[0].length;
 
+    if (minSizes == null) {
+      minSizes = new Size[nRows][nCols];
+      for (int row = 0; row < nRows; row++) {
+        for (int col = 0; col < nCols; col++) {
+          minSizes[row][col] = new Size(0, 0);
+        }
+      }
+    }
+    this.minSizes = minSizes;
+
+    if (maxSizes == null) {
+      maxSizes = new Size[nRows][nCols];
+      for (int row = 0; row < nRows; row++) {
+        for (int col = 0; col < nCols; col++) {
+          maxSizes[row][col] = new Size(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        }
+      }
+    }
+    this.maxSizes = maxSizes;
+
     this.headers = headers;
     nHeaders = headers == null ? 0 : headers.length;
 
@@ -95,120 +121,86 @@ public class TablePrinter {
       throw new IllegalArgumentException("Mismatched number of headers and columns:"
           + " " + nHeaders + " headers " + nCols + " columns ");
     }
+
+    showHeaders = headers != null;
+
+    if (minHeaderSizes == null) {
+      minHeaderSizes = new Size[nHeaders];
+      for (int header = 0; header < nHeaders; header++) {
+        minHeaderSizes[header] = new Size(0, 0);
+      }
+    }
+    this.minHeaderSizes = minHeaderSizes;
+
+    if (maxHeaderSizes == null) {
+      maxHeaderSizes = new Size[nHeaders];
+      for (int header = 0; header < nHeaders; header++) {
+        maxHeaderSizes[header] = new Size(Integer.MAX_VALUE, Integer.MAX_VALUE);
+      }
+    }
+    this.maxHeaderSizes = maxHeaderSizes;
     
     this.title = title;
+    showTitle = title != null;
 
-    this.minWidths = minWidths == null ? new int[nCols] : minWidths;
-
-    if (maxWidths == null) {
-      maxWidths = new int[nCols];
-      Arrays.fill(maxWidths, Integer.MAX_VALUE);
-    }
-    this.maxWidths = maxWidths;
-
-    this.pads = pads == null ? new Padding(0, 0) : pads;
+    this.pads = pads == null ? new Padding(0, 0, 0, 0) : pads;
 
     calculateRenderedSizes();
+  }
+
+  public PrintStream getOut() {
+    return out;
   }
 
   public void setOut(PrintStream out) {
     this.out = out;
   }
 
-  public void setHeaders(Object[] headers) {
-    this.headers = headers;
-    nHeaders = headers == null ? 0 : headers.length;
-    calculateRenderedSizes();
-  }
-
-  public void setRows(Object[][] rows) {
-    this.rows = rows;
-    nRows = rows == null ? 0 : rows.length;
-    nCols = rows == null ? 0 : rows[0].length;
-
-    if (minWidths.length < nCols) {
-      int[] newMinWidths = new int[nCols];
-      System.arraycopy(minWidths, 0, newMinWidths, 0, minWidths.length);
-      minWidths = newMinWidths;
-    } else if (minWidths.length > nCols) {
-      minWidths = Arrays.copyOfRange(minWidths, 0, nCols);
-    }
-
-    if (maxWidths.length < nCols) {
-      int[] newMaxWidths = new int[nCols];
-      Arrays.fill(newMaxWidths, Integer.MAX_VALUE);
-      System.arraycopy(maxWidths, 0, newMaxWidths, 0, maxWidths.length);
-      maxWidths = newMaxWidths;
-    } else if (maxWidths.length > nCols) {
-      maxWidths = Arrays.copyOfRange(maxWidths, 0, nCols);
-    }
-
-    calculateRenderedSizes();
-  }
-
-  public void setMinWidths(int[] minWidths) {
-    this.minWidths = minWidths == null ? new int[nCols] : minWidths;
-    calculateRenderedSizes();
-  }
-
-  public void setMaxWidths(int[] maxWidths) {
-    this.maxWidths = maxWidths;
-
-    if (maxWidths == null) {
-      maxWidths = new int[nCols];
-      Arrays.fill(maxWidths, Integer.MAX_VALUE);
-    }
-    this.maxWidths = maxWidths;
-    calculateRenderedSizes();
-  }
-
-  public void setPads(Padding pads) {
-    this.pads = pads == null ? new Padding(0, 0) : pads;
-    calculateRenderedSizes();
-  }
-  
-  public void setTitle(Object title) {
-    this.title = title;
-    calculateRenderedSizes();
-  }
-
   private void calculateRenderedSizes() {
-    renderedTitleWidth = 0;
-    renderedTitleHeight = 0;
-    renderedColWidths = new int[nCols];
+    renderedTitleSize = new Size();
+    renderedHeaderSizes = new Size[nHeaders];
+    renderedDataSizes = new Size[nRows][nCols];
     renderedRowHeights = new int[nRows];
+    renderedColWidths = new int[nCols];
 
     for (int row = 0; row < nRows; row++) {
       for (int col = 0; col < nCols; col++) {
         int dataWidth = rows[row][col] == null ? 0 : rows[row][col].toString().length();
 
         int width = Math.max(
-            minWidths[col],
-            Math.min(maxWidths[col], dataWidth));
-        renderedColWidths[col] = Math.max(renderedColWidths[col], width);
+            minSizes[row][col].width,
+            Math.min(maxSizes[row][col].width, dataWidth));
 
-        renderedRowHeights[row] = Math.max(
-            renderedRowHeights[row],
-            (int)Math.ceil(dataWidth/(double)width));
+        int height = Math.max(
+            minSizes[row][col].height,
+            Math.min(maxSizes[row][col].height, (int)Math.ceil(dataWidth/(double)width)));
+
+        renderedDataSizes[row][col] = new Size(width, height);
+        renderedColWidths[col] = Math.max(renderedColWidths[col], width);
+        renderedRowHeights[row] = Math.max(renderedRowHeights[row], height);
       }
     }
 
-    renderedHeaderHeight = 0;
-    for (int head = 0; head < nHeaders; head++) {
-      int headerWidth = headers[head] == null ? 0 : headers[head].toString().length();
+    if (showHeaders) {
+      for (int header = 0; header < nHeaders; header++) {
+        int headerWidth = headers[header] == null ? 0 : headers[header].toString().length();
 
-      int width = Math.max(
-          minWidths[head],
-          Math.min(maxWidths[head], headerWidth));
-      renderedColWidths[head] = Math.max(renderedColWidths[head], width);
-
-      renderedHeaderHeight = Math.max(
-          renderedHeaderHeight,
-          (int)Math.ceil(headerWidth/(double)width));
+        int width = Math.max(
+            minHeaderSizes[header].width,
+            Math.min(maxHeaderSizes[header].width, headerWidth));
+        
+        int height = Math.max(
+            minHeaderSizes[header].height,
+            Math.min(maxHeaderSizes[header].width, (int)Math.ceil(headerWidth/(double) width)));
+        
+        renderedHeaderSizes[header] = new Size(width, height);
+        renderedColWidths[header] = Math.max(renderedColWidths[header], width);
+        renderedHeaderHeight = Math.max(renderedHeaderHeight, height);
+      }
     }
 
-    if (title != null) {
-      renderedTitleWidth = Arrays.stream(renderedColWidths).sum()
+    if (showTitle) {
+      renderedTitleSize.width = Arrays.stream(renderedColWidths).sum()
           + nCols - 1
           + pads.left * (nCols - 1)
           + pads.right * (nCols - 1);
@@ -216,14 +208,14 @@ public class TablePrinter {
       String titleString = title.toString();
       int titleLength = titleString.length();
 
-      renderedTitleHeight = (int)Math.ceil(titleLength/(double)renderedTitleWidth);
+      renderedTitleSize.height = (int)Math.ceil(titleLength/(double)renderedTitleSize.width);
 
-      chunkedTitle = new String[renderedTitleHeight];
-      for (int chunk = 0; chunk < renderedTitleHeight; chunk++) {
-        int beginIndex = renderedTitleWidth * chunk;
+      chunkedTitle = new String[renderedTitleSize.height];
+      for (int chunk = 0; chunk < renderedTitleSize.height; chunk++) {
+        int beginIndex = renderedTitleSize.width * chunk;
         chunkedTitle[chunk] = titleString.substring(
             beginIndex,
-            Math.min(titleLength, renderedTitleWidth * (chunk + 1)));
+            Math.min(titleLength, renderedTitleSize.width * (chunk + 1)));
       }
     }
 
@@ -324,11 +316,11 @@ public class TablePrinter {
     printTopDividerLine(titleUI);
     printEmptyRows(titleUI, pads.bottom);
 
-    for (int chunk = 0; chunk < renderedTitleHeight; chunk++) {
+    for (int chunk = 0; chunk < renderedTitleSize.height; chunk++) {
       pr(titleUI.getLeftWall());
       pr(titleUI.getSpace(), pads.left);
 
-      prf(chunkedTitle[chunk], renderedTitleWidth);
+      prf(chunkedTitle[chunk], renderedTitleSize.width);
 
       pr(titleUI.getSpace(), pads.right);
       pr(titleUI.getRightWall());
@@ -340,10 +332,10 @@ public class TablePrinter {
     printBottomDividerLine(titleUI);
   }
 
-  private void printHeaders(boolean printTop) {
+  private void printHeaders() {
     GridUI headerUI = tableUI.getHeaderUI();
 
-    if (printTop) {
+    if (!showTitle) {
       printTopDividerLine(headerUI);
     }
     printEmptyRows(headerUI, pads.bottom);
@@ -355,7 +347,7 @@ public class TablePrinter {
         }
         pr(headerUI.getSpace(), pads.left);
 
-        prf(chunkedHeaders[col][chunk], renderedColWidths[col]);
+        prf(chunkedHeaders[col][chunk], renderedHeaderSizes[col].width);
 
         pr(headerUI.getSpace(), pads.right);
         if (col == rightCol) {
@@ -380,7 +372,11 @@ public class TablePrinter {
         }
         pr(gridUI.getSpace(), pads.left);
 
-        prf(chunkedData[row][col][chunk], renderedColWidths[col]);
+        if (chunk >= renderedDataSizes[row][col].height) {
+          prf(gridUI.getSpace(), renderedDataSizes[row][col].width);
+        } else {
+          prf(chunkedData[row][col][chunk], renderedDataSizes[row][col].width);
+        }
 
         pr(gridUI.getSpace(), pads.right);
         if (col == rightCol) {
@@ -398,13 +394,13 @@ public class TablePrinter {
     int bottomRow = nRows - 1;
     for (int row = 0; row < nRows; row++) {
       if (row == 0) {
-        if (title != null) {
+        if (showTitle) {
           printTitle();
-          if (headers != null) {
-            printHeaders(false);
+          if (showHeaders) {
+            printHeaders();
           }
-        } else if (headers != null) {
-          printHeaders(true);
+        } else if (showHeaders) {
+          printHeaders();
         } else {
           printTopDividerLine(cellUI);
         }
