@@ -74,7 +74,10 @@ public class TablePrinterModel {
   }
 
   public int columnCount() {
-    return rowCount() == 0 ? 0 : rows[0].length;
+    if (rowCount() == 0) {
+      return headerCount();
+    }
+    return rows[0].length;
   }
 
   public int headerCount() {

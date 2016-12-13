@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
 
+// TODO allow selection of only certain fields (exclusion & inclusion)
 public class ReflectionTablePrinterModel extends TablePrinterModel {
   public ReflectionTablePrinterModel(Collection<?> rows) {
     this(rows, null);

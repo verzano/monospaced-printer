@@ -10,7 +10,6 @@ import java.util.Arrays;
 
 // TODO add colors
 // TODO add styling
-// TODO break into model and view
 // TODO add setters/getters and organize them
 // TODO combine some of the similar drawing logic
 public class TablePrinter {
@@ -101,12 +100,13 @@ public class TablePrinter {
     }
 
     if (view.isShowTitle()) {
-      renderedTitleSize.width = Arrays.stream(renderedColWidths).sum()
-          + nCols - 1
-          + view.getPads().left * (nCols - 1)
-          + view.getPads().right * (nCols - 1);
-
       int titleWidth = model.titleWidth();
+      renderedTitleSize.width = Math.max(
+          titleWidth,
+          Arrays.stream(renderedColWidths).sum()
+              + nCols - 1
+              + view.getPads().left * (nCols - 1)
+              + view.getPads().right * (nCols - 1));
 
       renderedTitleSize.height = (int)Math.ceil(titleWidth/(double)renderedTitleSize.width);
 
@@ -140,7 +140,7 @@ public class TablePrinter {
       }
     }
 
-    chunkedHeaders = new String[nCols][];
+    chunkedHeaders = new String[nHeaders][];
     for (int head = 0; head < nHeaders; head++) {
       chunkedHeaders[head] = new String[renderedHeaderHeight];
 
@@ -247,7 +247,7 @@ public class TablePrinter {
         }
         pr(headerUI.getSpace(), view.getPads().left);
 
-        prf(chunkedHeaders[col][chunk], renderedHeaderSizes[col].width);
+        prf(chunkedHeaders[col][chunk], renderedColWidths[col]);
 
         pr(headerUI.getSpace(), view.getPads().right);
         if (col == rightCol) {
@@ -275,7 +275,7 @@ public class TablePrinter {
         if (chunk >= renderedDataSizes[row][col].height) {
           prf(gridUI.getSpace(), renderedDataSizes[row][col].width);
         } else {
-          prf(chunkedData[row][col][chunk], renderedDataSizes[row][col].width);
+          prf(chunkedData[row][col][chunk], renderedColWidths[col]);
         }
 
         pr(gridUI.getSpace(), view.getPads().right);
@@ -291,16 +291,18 @@ public class TablePrinter {
 
   public void print() {
     int rowCount = model.rowCount();
+    if (view.isShowTitle()) {
+      printTitle();
+      if (view.isShowHeaders()) {
+        printHeaders();
+      }
+    } else if (view.isShowHeaders()) {
+      printHeaders();
+    }
+
     if (rowCount > 0) {
       GridUI cellUI = view.cellUI();
-      if (view.isShowTitle()) {
-        printTitle();
-        if (view.isShowHeaders()) {
-          printHeaders();
-        }
-      } else if (view.isShowHeaders()) {
-        printHeaders();
-      } else {
+      if (!view.isShowTitle() && !view.isShowHeaders()) {
         printTopDividerLine(cellUI);
       }
 

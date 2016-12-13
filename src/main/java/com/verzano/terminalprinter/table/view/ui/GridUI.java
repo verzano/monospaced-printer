@@ -3,21 +3,21 @@ package com.verzano.terminalprinter.table.view.ui;
 // TODO add colors
 // TODO make the getters return colors as well???
 public class GridUI {
-  private static final char DEF_TOP_LEFT = '\u250C';
-  private static final char DEF_TOP_FLOOR = '\u2500';
-  private static final char DEF_TOP_CROSS = '\u252C';
-  private static final char DEF_TOP_RIGHT = '\u2510';
-  private static final char DEF_RIGHT_WALL = '\u2502';
-  private static final char DEF_RIGHT_CROSS = '\u2524';
-  private static final char DEF_BOT_RIGHT = '\u2518';
-  private static final char DEF_BOT_FLOOR = '\u2500';
-  private static final char DEF_BOT_CROSS = '\u2534';
-  private static final char DEF_BOT_LEFT = '\u2514';
-  private static final char DEF_LEFT_WALL = '\u2502';
-  private static final char DEF_LEFT_CROSS = '\u251C';
-  private static final char DEF_INNER_WALL = '\u2502';
-  private static final char DEF_INNER_FLOOR = '\u2500';
-  private static final char DEF_INNER_CROSS = '\u253C';
+  private static final char DEF_TOP_LEFT = '┌';
+  private static final char DEF_TOP_FLOOR = '─';
+  private static final char DEF_TOP_CROSS = '┬';
+  private static final char DEF_TOP_RIGHT = '┐';
+  private static final char DEF_RIGHT_WALL = '│';
+  private static final char DEF_RIGHT_CROSS = '┤';
+  private static final char DEF_BOT_RIGHT = '┘';
+  private static final char DEF_BOT_FLOOR = '─';
+  private static final char DEF_BOT_CROSS = '┴';
+  private static final char DEF_BOT_LEFT = '└';
+  private static final char DEF_LEFT_WALL = '│';
+  private static final char DEF_LEFT_CROSS = '├';
+  private static final char DEF_INNER_WALL = '│';
+  private static final char DEF_INNER_FLOOR = '─';
+  private static final char DEF_INNER_CROSS = '┼';
   private static final char DEF_SPACE = ' ';
 
   private char topLeft = DEF_TOP_LEFT;
