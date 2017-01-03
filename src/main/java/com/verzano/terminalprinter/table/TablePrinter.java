@@ -1,6 +1,7 @@
 package com.verzano.terminalprinter.table;
 
 import com.verzano.terminalprinter.table.metrics.Size;
+import com.verzano.terminalprinter.table.model.DefaultTablePrinterModel;
 import com.verzano.terminalprinter.table.model.TablePrinterModel;
 import com.verzano.terminalprinter.table.view.TablePrinterView;
 import com.verzano.terminalprinter.table.view.ui.GridUI;
@@ -33,10 +34,10 @@ public class TablePrinter {
   private String[][][] chunkedData;
 
   public TablePrinter(
-      TablePrinterModel model,
+      DefaultTablePrinterModel model,
       TablePrinterView view,
       PrintStream out) {
-    this.model = model == null ? new TablePrinterModel() : model;
+    this.model = model == null ? new DefaultTablePrinterModel() : model;
     this.view = view == null ? new TablePrinterView(this.model) : view;
     this.out = out == null ? System.out : out;
 

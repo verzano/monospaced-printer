@@ -1,7 +1,7 @@
 package com.verzano.terminalprinter.table;
 
 import com.verzano.terminalprinter.table.metrics.Size;
-import com.verzano.terminalprinter.table.model.TablePrinterModel;
+import com.verzano.terminalprinter.table.model.DefaultTablePrinterModel;
 import com.verzano.terminalprinter.table.view.TablePrinterView;
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class MinMaxTableTest {
   public void createTable2x2Min0x0Max1x1() throws Exception {
     String table2x2Min0x0Max1x1 = getTestResourceAsString("table/minmax/Table2x2Min0x0Max1x1.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {1, 2},
             {3, 4}
@@ -46,7 +46,7 @@ public class MinMaxTableTest {
   public void createTable2x2Min2x2Max2x2() throws Exception {
     String table2x2Min2x2Max2x2 = getTestResourceAsString("table/minmax/Table2x2Min2x2Max2x2.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {1, 2},
             {3, 4}
@@ -78,7 +78,7 @@ public class MinMaxTableTest {
   public void createTable2x2Min2x1Max2x1Wrapped() throws Exception {
     String table2x2Min2x1Max2x1Wrapped = getTestResourceAsString("table/minmax/Table2x2Min2x1Max2x1Wrapped.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {111, 2},
             {3, 4}

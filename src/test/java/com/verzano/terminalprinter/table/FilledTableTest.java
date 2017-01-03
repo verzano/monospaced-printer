@@ -1,6 +1,6 @@
 package com.verzano.terminalprinter.table;
 
-import com.verzano.terminalprinter.table.model.TablePrinterModel;
+import com.verzano.terminalprinter.table.model.DefaultTablePrinterModel;
 import com.verzano.terminalprinter.table.view.TablePrinterView;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,7 +14,7 @@ public class FilledTableTest {
   public void createTable1x1Filled() throws Exception {
     String table1x1Filled = getTestResourceAsString("table/filled/Table1x1Filled.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {1}
         },
@@ -29,7 +29,7 @@ public class FilledTableTest {
   public void createTable1x1FilledWithHeaders() throws Exception {
     String table1x1FilledWithHeaders = getTestResourceAsString("table/filled/Table1x1FilledWithHeaders.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {1}
         },
@@ -55,7 +55,7 @@ public class FilledTableTest {
   public void createTable1x1FilledWithHeadersAndTitle() throws Exception {
     String table1x1FilledWithHeadersAndTitle = getTestResourceAsString("table/filled/Table1x1FilledWithHeadersAndTitle.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {1}
         },
@@ -81,7 +81,7 @@ public class FilledTableTest {
   public void createTable1x1FilledWithTitle() throws Exception {
     String table1x1FilledWithTitle = getTestResourceAsString("table/filled/Table1x1FilledWithTitle.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {1}
         },
@@ -106,7 +106,7 @@ public class FilledTableTest {
   public void createTable1x2Filled() throws Exception {
     String table1x2Filled = getTestResourceAsString("table/filled/Table1x2Filled.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {1, 2}
         },
@@ -121,7 +121,7 @@ public class FilledTableTest {
   public void createTable1x2EmptyWithHeaders() throws Exception {
     String table1x2FilledWithHeaders = getTestResourceAsString("table/filled/Table1x2FilledWithHeaders.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {1, 2}
         },
@@ -146,7 +146,7 @@ public class FilledTableTest {
   public void createTable1x2EmptyWithHeadersAndTitle() throws Exception {
     String table1x2FilledWithHeadersAndTitle = getTestResourceAsString("table/filled/Table1x2FilledWithHeadersAndTitle.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {1, 2}
         },
@@ -172,7 +172,7 @@ public class FilledTableTest {
   public void createTable1x2EmptyWithTitle() throws Exception {
     String table1x2FilledWithHeaders = getTestResourceAsString("table/filled/Table1x2FilledWithTitle.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {1, 2}
         },
@@ -197,7 +197,7 @@ public class FilledTableTest {
   public void createTable2x1Filled() throws Exception {
     String table2x1Filled = getTestResourceAsString("table/filled/Table2x1Filled.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {1},
             {2}
@@ -213,7 +213,7 @@ public class FilledTableTest {
   public void createTable2x2Filled() throws Exception {
     String table2x2Filled = getTestResourceAsString("table/filled/Table2x2Filled.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {1, 2},
             {3, 4}

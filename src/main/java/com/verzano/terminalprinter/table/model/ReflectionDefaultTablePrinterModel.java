@@ -5,12 +5,12 @@ import java.util.Arrays;
 import java.util.Collection;
 
 // TODO allow selection of only certain fields (exclusion & inclusion)
-public class ReflectionTablePrinterModel extends TablePrinterModel {
-  public ReflectionTablePrinterModel(Collection<?> rows) {
+public class ReflectionDefaultTablePrinterModel extends DefaultTablePrinterModel {
+  public ReflectionDefaultTablePrinterModel(Collection<?> rows) {
     this(rows, null);
   }
 
-  public ReflectionTablePrinterModel(Collection<?> rows, String title) {
+  public ReflectionDefaultTablePrinterModel(Collection<?> rows, String title) {
     super(null, null, title);
 
     String[] headers = null;

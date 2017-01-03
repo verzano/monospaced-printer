@@ -1,7 +1,7 @@
 package com.verzano.terminalprinter.table;
 
 import com.verzano.terminalprinter.table.metrics.Padding;
-import com.verzano.terminalprinter.table.model.TablePrinterModel;
+import com.verzano.terminalprinter.table.model.DefaultTablePrinterModel;
 import com.verzano.terminalprinter.table.view.TablePrinterView;
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class PaddingTableTest {
   public void createTable1x1Pad0x0x0x0() throws Exception {
     String table1x1Pad0x0x0x0 = getTestResourceAsString("table/padding/Table1x1Pad0x0x0x0.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{{1}},
         null,
         null);
@@ -37,7 +37,7 @@ public class PaddingTableTest {
   public void createTable1x1Pad0x0x0x1() throws Exception {
     String table1x1Pad0x0x0x1 = getTestResourceAsString("table/padding/Table1x1Pad0x0x0x1.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{{1}},
         null,
         null);
@@ -60,7 +60,7 @@ public class PaddingTableTest {
   public void createTable1x1Pad0x0x1x0() throws Exception {
     String table1x1Pad0x0x1x0 = getTestResourceAsString("table/padding/Table1x1Pad0x0x1x0.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{{1}},
         null,
         null);
@@ -83,7 +83,7 @@ public class PaddingTableTest {
   public void createTable1x1Pad0x0x1x1() throws Exception {
     String table1x1Pad0x0x1x1 = getTestResourceAsString("table/padding/Table1x1Pad0x0x1x1.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{{1}},
         null,
         null);
@@ -106,7 +106,7 @@ public class PaddingTableTest {
   public void createTable1x1Pad0x1x0x0() throws Exception {
     String table1x1Pad0x1x0x0 = getTestResourceAsString("table/padding/Table1x1Pad0x1x0x0.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{{1}},
         null,
         null);
@@ -129,7 +129,7 @@ public class PaddingTableTest {
   public void createTable1x1Pad0x1x0x1() throws Exception {
     String table1x1Pad0x1x0x1 = getTestResourceAsString("table/padding/Table1x1Pad0x1x0x1.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{{1}},
         null,
         null);
@@ -152,7 +152,7 @@ public class PaddingTableTest {
   public void createTable1x1Pad0x1x1x0() throws Exception {
     String table1x1Pad0x1x1x0 = getTestResourceAsString("table/padding/Table1x1Pad0x1x1x0.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{{1}},
         null,
         null);
@@ -175,7 +175,7 @@ public class PaddingTableTest {
   public void createTable1x1Pad0x1x1x1() throws Exception {
     String table1x1Pad0x1x1x1 = getTestResourceAsString("table/padding/Table1x1Pad0x1x1x1.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{{1}},
         null,
         null);
@@ -198,7 +198,7 @@ public class PaddingTableTest {
   public void createTable1x1Pad1x0x0x0() throws Exception {
     String table1x1Pad1x0x0x0 = getTestResourceAsString("table/padding/Table1x1Pad1x0x0x0.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{{1}},
         null,
         null);
@@ -221,7 +221,7 @@ public class PaddingTableTest {
   public void createTable1x1Pad1x0x0x1() throws Exception {
     String table1x1Pad1x0x0x1 = getTestResourceAsString("table/padding/Table1x1Pad1x0x0x1.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{{1}},
         null,
         null);
@@ -243,7 +243,7 @@ public class PaddingTableTest {
   public void createTable1x1Pad1x0x1x0() throws Exception {
     String table1x1Pad1x0x1x0 = getTestResourceAsString("table/padding/Table1x1Pad1x0x1x0.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{{1}},
         null,
         null);
@@ -266,7 +266,7 @@ public class PaddingTableTest {
   public void createTable1x1Pad1x0x1x1() throws Exception {
     String table1x1Pad1x0x1x1 = getTestResourceAsString("table/padding/Table1x1Pad1x0x1x1.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{{1}},
         null,
         null);
@@ -289,7 +289,7 @@ public class PaddingTableTest {
   public void createTable1x1Pad1x1x0x0() throws Exception {
     String table1x1Pad1x1x0x0 = getTestResourceAsString("table/padding/Table1x1Pad1x1x0x0.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{{1}},
         null,
         null);
@@ -312,7 +312,7 @@ public class PaddingTableTest {
   public void createTable1x1Pad1x1x0x1() throws Exception {
     String table1x1Pad1x1x0x1 = getTestResourceAsString("table/padding/Table1x1Pad1x1x0x1.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{{1}},
         null,
         null);
@@ -335,7 +335,7 @@ public class PaddingTableTest {
   public void createTable1x1Pad1x1x1x0() throws Exception {
     String table1x1Pad1x1x1x0 = getTestResourceAsString("table/padding/Table1x1Pad1x1x1x0.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{{1}},
         null,
         null);
@@ -358,7 +358,7 @@ public class PaddingTableTest {
   public void createTable1x1Pad1x1x1x1() throws Exception {
     String table1x1Pad1x1x1x1 = getTestResourceAsString("table/padding/Table1x1Pad1x1x1x1.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{{1}},
         null,
         null);

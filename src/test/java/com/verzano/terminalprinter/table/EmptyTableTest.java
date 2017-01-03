@@ -1,6 +1,6 @@
 package com.verzano.terminalprinter.table;
 
-import com.verzano.terminalprinter.table.model.TablePrinterModel;
+import com.verzano.terminalprinter.table.model.DefaultTablePrinterModel;
 import com.verzano.terminalprinter.table.view.TablePrinterView;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,7 +14,7 @@ public class EmptyTableTest {
   public void createTable0x0Empty() throws Exception {
     String table0x0Empty = getTestResourceAsString("table/empty/Table0x0Empty.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{},
         null,
         null);
@@ -27,7 +27,7 @@ public class EmptyTableTest {
   public void createTable0x1EmptyWithHeaders() throws Exception {
     String table0x1EmptyWithHeaders = getTestResourceAsString("table/empty/Table0x1EmptyWithHeaders.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{},
         new Object[]{"C1"},
         null);
@@ -51,7 +51,7 @@ public class EmptyTableTest {
   public void createTable0x1EmptyWithTitle() throws Exception {
     String table0x1EmptyWithTitle = getTestResourceAsString("table/empty/Table0x1EmptyWithTitle.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{},
         new Object[]{},
         "Title");
@@ -74,7 +74,7 @@ public class EmptyTableTest {
   public void createTable0x2EmptyWithHeaders() throws Exception {
     String table0x2EmptyWithHeaders = getTestResourceAsString("table/empty/Table0x2EmptyWithHeaders.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{},
         new Object[]{"C1", "C2"},
         null);
@@ -97,7 +97,7 @@ public class EmptyTableTest {
   public void createTable0x2EmptyWithHeadersAndTitle() throws Exception {
     String table0x2EmptyWithHeadersAndTitle = getTestResourceAsString("table/empty/Table0x2EmptyWithHeadersAndTitle.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{},
         new Object[]{"C1", "C2"},
         "Title");
@@ -120,7 +120,7 @@ public class EmptyTableTest {
   public void createTable1x1Empty() throws Exception {
     String table1x1Empty = getTestResourceAsString("table/empty/Table1x1Empty.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {null}
         },
@@ -135,7 +135,7 @@ public class EmptyTableTest {
   public void createTable1x1EmptyWithHeaders() throws Exception {
     String table1x1EmptyWithHeaders = getTestResourceAsString("table/empty/Table1x1EmptyWithHeaders.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {null}
         },
@@ -161,7 +161,7 @@ public class EmptyTableTest {
   public void createTable1x1EmptyWithHeadersAndTitle() throws Exception {
     String table1x1EmptyWithHeadersAndTitle = getTestResourceAsString("table/empty/Table1x1EmptyWithHeadersAndTitle.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {null}
         },
@@ -187,7 +187,7 @@ public class EmptyTableTest {
   public void createTable1x1EmptyWithTitle() throws Exception {
     String table1x1EmptyWithTitle = getTestResourceAsString("table/empty/Table1x1EmptyWithTitle.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {null}
         },
@@ -212,7 +212,7 @@ public class EmptyTableTest {
   public void createTable1x2Empty() throws Exception {
     String table1x2Empty = getTestResourceAsString("table/empty/Table1x2Empty.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {null, null}
         },
@@ -227,7 +227,7 @@ public class EmptyTableTest {
   public void createTable1x2EmptyWithHeaders() throws Exception {
     String table1x2EmptyWithHeaders = getTestResourceAsString("table/empty/Table1x2EmptyWithHeaders.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {null, null}
         },
@@ -253,7 +253,7 @@ public class EmptyTableTest {
   public void createTable1x2EmptyWithHeadersAndTitle() throws Exception {
     String table1x2EmptyWithHeadersAndTitle = getTestResourceAsString("table/empty/Table1x2EmptyWithHeadersAndTitle.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {null, null}
         },
@@ -279,7 +279,7 @@ public class EmptyTableTest {
   public void createTable1x2EmptyWithTitle() throws Exception {
     String table1x2EmptyWithTitle = getTestResourceAsString("table/empty/Table1x2EmptyWithTitle.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {null, null}
         },
@@ -304,7 +304,7 @@ public class EmptyTableTest {
   public void createTable2x1Empty() throws Exception {
     String table2x1Empty = getTestResourceAsString("table/empty/Table2x1Empty.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {null},
             {null}
@@ -320,7 +320,7 @@ public class EmptyTableTest {
   public void createTable2x2Empty() throws Exception {
     String table2x2Empty = getTestResourceAsString("table/empty/Table2x2Empty.txt");
 
-    TablePrinterModel model = new TablePrinterModel(
+    DefaultTablePrinterModel model = new DefaultTablePrinterModel(
         new Object[][]{
             {null, null},
             {null, null}
