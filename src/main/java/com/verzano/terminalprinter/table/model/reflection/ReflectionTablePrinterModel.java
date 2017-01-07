@@ -1,16 +1,18 @@
-package com.verzano.terminalprinter.table.model;
+package com.verzano.terminalprinter.table.model.reflection;
+
+import com.verzano.terminalprinter.table.model.DefaultTablePrinterModel;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
 
 // TODO allow selection of only certain fields (exclusion & inclusion)
-public class ReflectionDefaultTablePrinterModel extends DefaultTablePrinterModel {
-  public ReflectionDefaultTablePrinterModel(Collection<?> rows) {
+public class ReflectionTablePrinterModel extends DefaultTablePrinterModel {
+  public ReflectionTablePrinterModel(Collection<?> rows) {
     this(rows, null);
   }
 
-  public ReflectionDefaultTablePrinterModel(Collection<?> rows, String title) {
+  public ReflectionTablePrinterModel(Collection<?> rows, String title) {
     super(null, null, title);
 
     String[] headers = null;

@@ -34,7 +34,7 @@ public class TablePrinter {
   private String[][][] chunkedData;
 
   public TablePrinter(
-      DefaultTablePrinterModel model,
+      TablePrinterModel model,
       TablePrinterView view,
       PrintStream out) {
     this.model = model == null ? new DefaultTablePrinterModel() : model;

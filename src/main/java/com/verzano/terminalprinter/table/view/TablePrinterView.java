@@ -37,7 +37,7 @@ public class TablePrinterView {
       boolean showTitle,
       Padding pads) {
     if (model == null) {
-      throw new IllegalArgumentException("DefaultTablePrinterModel cannot be null");
+      throw new IllegalArgumentException("model cannot be null");
     }
 
     this.model = model;
