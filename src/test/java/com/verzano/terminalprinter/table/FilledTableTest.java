@@ -2,7 +2,6 @@ package com.verzano.terminalprinter.table;
 
 import com.verzano.terminalprinter.table.model.DefaultTablePrinterModel;
 import com.verzano.terminalprinter.table.view.TablePrinterView;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.verzano.terminalprinter.test.helper.TestHelper.getTestResourceAsString;
@@ -51,7 +50,6 @@ public class FilledTableTest {
   }
 
   @Test
-  @Ignore
   public void createTable1x1FilledWithHeadersAndTitle() throws Exception {
     String table1x1FilledWithHeadersAndTitle = getTestResourceAsString("table/filled/Table1x1FilledWithHeadersAndTitle.txt");
 
@@ -77,7 +75,6 @@ public class FilledTableTest {
   }
 
   @Test
-  @Ignore
   public void createTable1x1FilledWithTitle() throws Exception {
     String table1x1FilledWithTitle = getTestResourceAsString("table/filled/Table1x1FilledWithTitle.txt");
 
@@ -168,7 +165,6 @@ public class FilledTableTest {
   }
 
   @Test
-  @Ignore
   public void createTable1x2EmptyWithTitle() throws Exception {
     String table1x2FilledWithHeaders = getTestResourceAsString("table/filled/Table1x2FilledWithTitle.txt");
 

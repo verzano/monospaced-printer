@@ -5,6 +5,7 @@ import com.verzano.terminalprinter.table.model.TablePrinterModel;
 import static com.verzano.terminalprinter.table.model.ansi.AnsiCodes.CLEAR;
 import static com.verzano.terminalprinter.table.model.ansi.AnsiCodes.generateCode;
 
+// TODO to make this work right may need to add a 'renderedDataAt' and 'renderedDataWidth'....
 public class AnsiTablePrinterModel implements TablePrinterModel {
   private TablePrinterModel decoratedModel;
   private String[][] attributes;

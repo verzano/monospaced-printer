@@ -7,19 +7,19 @@ import java.util.Arrays;
 import java.util.Collection;
 
 // TODO allow selection of only certain fields (exclusion & inclusion)
+// TODO don't extends DefaultTablePrinterModel, maybe use a default in the TablePrinterModel...
 public class ReflectionTablePrinterModel extends DefaultTablePrinterModel {
   public ReflectionTablePrinterModel(Collection<?> rows) {
-    this(rows, null);
-  }
-
-  public ReflectionTablePrinterModel(Collection<?> rows, String title) {
-    super(null, null, title);
+    super(null, null, null);
 
     String[] headers = null;
     Object[][] reflectionRows = null;
 
     if (rows.size() > 0) {
-      Field[] fields = rows.iterator().next().getClass().getDeclaredFields();
+      Class clazz = rows.iterator().next().getClass();
+      setTitle(clazz.getSimpleName());
+
+      Field[] fields = clazz.getDeclaredFields();
       headers = Arrays.stream(fields)
           .map(Field::getName)
           .toArray(String[]::new);

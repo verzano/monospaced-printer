@@ -1,5 +1,10 @@
 package com.verzano.terminalprinter.table.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class DefaultTablePrinterModel implements TablePrinterModel {
   private Object[][] rows;
   private Object[] headers;
@@ -25,30 +30,9 @@ public class DefaultTablePrinterModel implements TablePrinterModel {
     this.title = title;
   }
 
-  public Object[][] getRows() {
-    return rows;
-  }
-
-
-  public void setRows(Object[][] rows) {
-    this.rows = rows;
-  }
-
-  public Object[] getHeaders() {
-    return headers;
-  }
-
-  public void setHeaders(Object[] headers) {
-    this.headers = headers;
-  }
-
   @Override
   public Object getTitle() {
     return title;
-  }
-
-  public void setTitle(Object title) {
-    this.title = title;
   }
 
   @Override

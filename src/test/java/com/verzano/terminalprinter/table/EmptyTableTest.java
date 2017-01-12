@@ -2,7 +2,6 @@ package com.verzano.terminalprinter.table;
 
 import com.verzano.terminalprinter.table.model.DefaultTablePrinterModel;
 import com.verzano.terminalprinter.table.view.TablePrinterView;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.verzano.terminalprinter.test.helper.TestHelper.getTestResourceAsString;
@@ -47,7 +46,6 @@ public class EmptyTableTest {
   }
 
   @Test
-  @Ignore
   public void createTable0x1EmptyWithTitle() throws Exception {
     String table0x1EmptyWithTitle = getTestResourceAsString("table/empty/Table0x1EmptyWithTitle.txt");
 
@@ -157,7 +155,6 @@ public class EmptyTableTest {
   }
 
   @Test
-  @Ignore
   public void createTable1x1EmptyWithHeadersAndTitle() throws Exception {
     String table1x1EmptyWithHeadersAndTitle = getTestResourceAsString("table/empty/Table1x1EmptyWithHeadersAndTitle.txt");
 
@@ -183,7 +180,6 @@ public class EmptyTableTest {
   }
 
   @Test
-  @Ignore
   public void createTable1x1EmptyWithTitle() throws Exception {
     String table1x1EmptyWithTitle = getTestResourceAsString("table/empty/Table1x1EmptyWithTitle.txt");
 
@@ -249,7 +245,6 @@ public class EmptyTableTest {
   }
 
   @Test
-  @Ignore
   public void createTable1x2EmptyWithHeadersAndTitle() throws Exception {
     String table1x2EmptyWithHeadersAndTitle = getTestResourceAsString("table/empty/Table1x2EmptyWithHeadersAndTitle.txt");
 
@@ -275,7 +270,6 @@ public class EmptyTableTest {
   }
 
   @Test
-  @Ignore
   public void createTable1x2EmptyWithTitle() throws Exception {
     String table1x2EmptyWithTitle = getTestResourceAsString("table/empty/Table1x2EmptyWithTitle.txt");
 

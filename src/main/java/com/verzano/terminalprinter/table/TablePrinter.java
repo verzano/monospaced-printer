@@ -7,7 +7,7 @@ import com.verzano.terminalprinter.table.view.TablePrinterView;
 import com.verzano.terminalprinter.table.view.ui.GridUI;
 
 import java.io.PrintStream;
-import java.util.Arrays;
+import java.util.stream.IntStream;
 
 // TODO add colors
 // TODO add styling
@@ -33,10 +33,7 @@ public class TablePrinter {
   private String[][] chunkedHeaders;
   private String[][][] chunkedData;
 
-  public TablePrinter(
-      TablePrinterModel model,
-      TablePrinterView view,
-      PrintStream out) {
+  public TablePrinter(TablePrinterModel model, TablePrinterView view,   PrintStream out) {
     this.model = model == null ? new DefaultTablePrinterModel() : model;
     this.view = view == null ? new TablePrinterView(this.model) : view;
     this.out = out == null ? System.out : out;
@@ -102,21 +99,37 @@ public class TablePrinter {
 
     if (view.isShowTitle()) {
       int titleWidth = model.titleWidth();
-      renderedTitleSize.width = Math.max(
-          titleWidth,
-          Arrays.stream(renderedColWidths).sum()
-              + nCols - 1
-              + view.getPads().left * (nCols - 1)
-              + view.getPads().right * (nCols - 1));
+      int renderedTableWidth = IntStream.of(renderedColWidths).sum()
+          + nCols - 1
+          + view.getPads().left * (nCols - 1)
+          + view.getPads().right * (nCols - 1);
+      renderedTitleSize.width = Math.max(titleWidth, renderedTableWidth);
 
-      renderedTitleSize.height = (int)Math.ceil(titleWidth/(double)renderedTitleSize.width);
-
+      // TODO for now enforce title locked to one line...
+      renderedTitleSize.height = 1;
       chunkedTitle = new String[renderedTitleSize.height];
-      for (int chunk = 0; chunk < renderedTitleSize.height; chunk++) {
-        int beginIndex = renderedTitleSize.width * chunk;
-        chunkedTitle[chunk] = model.getTitle().toString().substring(
-            beginIndex,
-            Math.min(titleWidth, renderedTitleSize.width * (chunk + 1)));
+      chunkedTitle[0] = model.getTitle().toString();
+//      renderedTitleSize.height = (int)Math.ceil(titleWidth/(double)renderedTitleSize.width);
+//
+//      chunkedTitle = new String[renderedTitleSize.height];
+//      for (int chunk = 0; chunk < renderedTitleSize.height; chunk++) {
+//        int beginIndex = renderedTitleSize.width * chunk;
+//        chunkedTitle[chunk] = model.getTitle().toString().substring(
+//            beginIndex,
+//            Math.min(titleWidth, renderedTitleSize.width * (chunk + 1)));
+//      }
+
+      // TODO decide if columns need expanding...
+      // TODO for now just add to first column
+      // TODO add ability to specify aditional spacing type
+      if (renderedTableWidth < renderedTitleSize.width) {
+        int diff = renderedTitleSize.width - renderedTableWidth;
+        if (renderedColWidths.length > 0) {
+          renderedColWidths[0] += diff;
+        }
+        if (renderedHeaderSizes.length > 0) {
+          renderedHeaderSizes[0].width += diff;
+        }
       }
     }
 
