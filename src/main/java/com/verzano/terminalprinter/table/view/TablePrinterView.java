@@ -1,7 +1,7 @@
 package com.verzano.terminalprinter.table.view;
 
-import com.verzano.terminalprinter.table.metrics.Padding;
-import com.verzano.terminalprinter.table.metrics.Size;
+import com.verzano.terminalprinter.metrics.Padding;
+import com.verzano.terminalprinter.metrics.Size;
 import com.verzano.terminalprinter.table.model.TablePrinterModel;
 import com.verzano.terminalprinter.table.view.ui.GridUI;
 import com.verzano.terminalprinter.table.view.ui.TableUI;

@@ -1,6 +1,6 @@
 package com.verzano.terminalprinter.table;
 
-import com.verzano.terminalprinter.table.metrics.Padding;
+import com.verzano.terminalprinter.metrics.Padding;
 import com.verzano.terminalprinter.table.model.DefaultTablePrinterModel;
 import com.verzano.terminalprinter.table.view.TablePrinterView;
 import org.junit.Test;

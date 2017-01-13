@@ -1,6 +1,6 @@
 package com.verzano.terminalprinter.table;
 
-import com.verzano.terminalprinter.table.metrics.Size;
+import com.verzano.terminalprinter.metrics.Size;
 import com.verzano.terminalprinter.table.model.DefaultTablePrinterModel;
 import com.verzano.terminalprinter.table.model.TablePrinterModel;
 import com.verzano.terminalprinter.table.view.TablePrinterView;

@@ -1,4 +1,4 @@
-package com.verzano.terminalprinter.table.metrics;
+package com.verzano.terminalprinter.metrics;
 
 public class Size {
   public int width;
