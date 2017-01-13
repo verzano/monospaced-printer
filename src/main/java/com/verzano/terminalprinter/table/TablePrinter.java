@@ -1,5 +1,6 @@
 package com.verzano.terminalprinter.table;
 
+import com.verzano.terminalprinter.TerminalPrinter;
 import com.verzano.terminalprinter.metrics.Size;
 import com.verzano.terminalprinter.table.model.DefaultTablePrinterModel;
 import com.verzano.terminalprinter.table.model.TablePrinterModel;
@@ -13,9 +14,7 @@ import java.util.stream.IntStream;
 // TODO add styling
 // TODO add setters/getters and organize them
 // TODO combine some of the similar drawing logic
-public class TablePrinter {
-  private PrintStream out;
-
+public class TablePrinter extends TerminalPrinter {
   private TablePrinterModel model;
 
   private TablePrinterView view;
@@ -33,20 +32,12 @@ public class TablePrinter {
   private String[][] chunkedHeaders;
   private String[][][] chunkedData;
 
-  public TablePrinter(TablePrinterModel model, TablePrinterView view,   PrintStream out) {
+  public TablePrinter(TablePrinterModel model, TablePrinterView view,   PrintStream printer) {
+    super(printer);
     this.model = model == null ? new DefaultTablePrinterModel() : model;
     this.view = view == null ? new TablePrinterView(this.model) : view;
-    this.out = out == null ? System.out : out;
 
     calculateRenderedSizes();
-  }
-
-  public PrintStream getOut() {
-    return out;
-  }
-
-  public void setOut(PrintStream out) {
-    this.out = out;
   }
 
   private void calculateRenderedSizes() {
@@ -303,6 +294,7 @@ public class TablePrinter {
     }
   }
 
+  @Override
   public void print() {
     int rowCount = model.rowCount();
     if (view.isShowTitle()) {
@@ -332,23 +324,5 @@ public class TablePrinter {
         }
       }
     }
-  }
-
-  private void pr(Object c) {
-    out.print(c);
-  }
-
-  private void pr(Object c, int reps) {
-    for (int i = 0; i < reps; i++) {
-      pr(c);
-    }
-  }
-
-  private void prf(Object c, int width) {
-    out.printf("%" + width + "s", c);
-  }
-
-  private void ln() {
-    out.println();
   }
 }
