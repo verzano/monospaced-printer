@@ -25,7 +25,7 @@ public class TestHelper {
   public static String printTableAsString(TablePrinter printer) throws IOException {
     try(ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream out = new PrintStream(baos)) {
-      printer.setOut(out);
+      printer.setPrinter(out);
       printer.print();
       return new String(baos.toByteArray(), StandardCharsets.UTF_8);
     }

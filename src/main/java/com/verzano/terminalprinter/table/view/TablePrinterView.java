@@ -21,6 +21,9 @@ public class TablePrinterView {
   private Size[] maxHeaderSizes;
 
   @Setter
+  private Expansion expansion;
+
+  @Setter
   private boolean showHeaders;
 
   @Setter

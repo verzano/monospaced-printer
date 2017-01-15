@@ -13,7 +13,7 @@ public abstract class TerminalPrinter {
   public abstract void print();
 
   public TerminalPrinter(PrintStream printer) {
-    this.printer = printer;
+    this.printer = printer == null ? System.out : printer;
   }
   
   public void pr(Object c) {

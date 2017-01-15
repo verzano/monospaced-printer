@@ -110,16 +110,38 @@ public class TablePrinter extends TerminalPrinter {
 //            Math.min(titleWidth, renderedTitleSize.width * (chunk + 1)));
 //      }
 
-      // TODO decide if columns need expanding...
-      // TODO for now just add to first column
-      // TODO add ability to specify aditional spacing type
       if (renderedTableWidth < renderedTitleSize.width) {
         int diff = renderedTitleSize.width - renderedTableWidth;
-        if (renderedColWidths.length > 0) {
-          renderedColWidths[0] += diff;
-        }
-        if (renderedHeaderSizes.length > 0) {
-          renderedHeaderSizes[0].width += diff;
+
+        switch (view.getExpansion()) {
+          case FIRST:
+            if (renderedColWidths.length > 0) {
+              renderedColWidths[0] += diff;
+            }
+            if (renderedHeaderSizes.length > 0) {
+              renderedHeaderSizes[0].width += diff;
+            }
+            break;
+          case LAST:
+            if (renderedColWidths.length > 0) {
+              renderedColWidths[model.rowCount() - 1] += diff;
+            }
+            if (renderedHeaderSizes.length > 0) {
+              renderedHeaderSizes[model.headerCount() - 1].width += diff;
+            }
+            break;
+          case ALL:
+            if (renderedColWidths.length > 0) {
+              for (int col = 0; col < model.columnCount(); col++) {
+                renderedColWidths[col] += diff/model.columnCount();
+              }
+            }
+            if (renderedHeaderSizes.length > 0) {
+              for (int head = 0; head < model.headerCount(); head++) {
+                renderedHeaderSizes[head].width += diff/model.headerCount();
+              }
+            }
+            break;
         }
       }
     }

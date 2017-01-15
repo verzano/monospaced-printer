@@ -68,7 +68,7 @@ public class DefaultTablePrinterModel implements TablePrinterModel {
   @Override
   public int columnCount() {
     if (rowCount() == 0) {
-      return headerCount();
+      return headerCount() == 0 ? 1 : headerCount();
     }
     return rows[0].length;
   }
