@@ -115,31 +115,35 @@ public class TablePrinter extends TerminalPrinter {
 
         switch (view.getExpansion()) {
           case FIRST:
-            if (renderedColWidths.length > 0) {
+            if (model.columnCount() > 0) {
               renderedColWidths[0] += diff;
             }
-            if (renderedHeaderSizes.length > 0) {
+            if (model.headerCount() > 0) {
               renderedHeaderSizes[0].width += diff;
             }
             break;
           case LAST:
-            if (renderedColWidths.length > 0) {
-              renderedColWidths[model.rowCount() - 1] += diff;
+            if (model.columnCount() > 0) {
+              renderedColWidths[model.columnCount() - 1] += diff;
             }
-            if (renderedHeaderSizes.length > 0) {
+            if (model.headerCount() > 0) {
               renderedHeaderSizes[model.headerCount() - 1].width += diff;
             }
             break;
           case ALL:
-            if (renderedColWidths.length > 0) {
+            if (model.columnCount() > 0) {
               for (int col = 0; col < model.columnCount(); col++) {
                 renderedColWidths[col] += diff/model.columnCount();
               }
+
+              renderedColWidths[0] += diff % model.columnCount();
             }
-            if (renderedHeaderSizes.length > 0) {
+            if (model.headerCount() > 0) {
               for (int head = 0; head < model.headerCount(); head++) {
                 renderedHeaderSizes[head].width += diff/model.headerCount();
               }
+
+              renderedColWidths[0] += diff % model.headerCount();
             }
             break;
         }
