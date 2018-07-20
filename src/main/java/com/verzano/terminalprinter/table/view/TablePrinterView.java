@@ -17,7 +17,10 @@ public class TablePrinterView {
   private Size[] minHeaderSizes;
   private Size[] maxHeaderSizes;
 
-  private Expansion expansion;
+  // TODO pick a better default or allow choice in the constructor
+  // TODO so far this can't be null
+  // TODO pick a better way to expand more evenly
+  private Expansion expansion = Expansion.ALL;
 
   private boolean showHeaders;
 
@@ -65,7 +68,7 @@ public class TablePrinterView {
       minSizes = new Size[rowCount][columnCount];
       for (int row = 0; row < rowCount; row++) {
         for (int col = 0; col < columnCount; col++) {
-          minSizes[row][col] = new Size(0, 0);
+          minSizes[row][col] = new Size(0, 1);
         }
       }
     }

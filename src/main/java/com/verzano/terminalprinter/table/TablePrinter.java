@@ -14,6 +14,7 @@ import java.util.stream.IntStream;
 // TODO add styling
 // TODO add setters/getters and organize them
 // TODO combine some of the similar drawing logic
+// TODO add a configurable default for null
 public class TablePrinter extends TerminalPrinter {
   private TablePrinterModel model;
 
@@ -32,7 +33,7 @@ public class TablePrinter extends TerminalPrinter {
   private String[][] chunkedHeaders;
   private String[][][] chunkedData;
 
-  public TablePrinter(TablePrinterModel model, TablePrinterView view,   PrintStream printer) {
+  public TablePrinter(TablePrinterModel model, TablePrinterView view, PrintStream printer) {
     super(printer);
     this.model = model == null ? new DefaultTablePrinterModel() : model;
     this.view = view == null ? new TablePrinterView(this.model) : view;
@@ -156,17 +157,9 @@ public class TablePrinter extends TerminalPrinter {
         chunkedData[row][col] = new String[renderedRowHeights[row]];
 
         for (int chunk = 0; chunk < renderedRowHeights[row]; chunk++) {
-          String data = model.dataAt(row, col).toString();
-          int dataLength = data.length();
-          int beginIndex = renderedColWidths[col] * chunk;
-
-          if (beginIndex < dataLength) {
-            chunkedData[row][col][chunk] = data.substring(
-                beginIndex,
-                Math.min(dataLength, renderedColWidths[col] * (chunk + 1)));
-          } else {
-            chunkedData[row][col][chunk] = view.cellUI().getSpace() + "";
-          }
+          Object data = model.dataAt(row, col);
+          String dataString = data == null ? "" : data.toString();
+          chunkText(dataString, chunk, chunkedData[row][col], renderedColWidths[col], view.cellUI());
         }
       }
     }
@@ -176,19 +169,24 @@ public class TablePrinter extends TerminalPrinter {
       chunkedHeaders[head] = new String[renderedHeaderHeight];
 
       for (int chunk = 0; chunk < renderedHeaderHeight; chunk++) {
-        String header = model.headerAt(head).toString();
-        int headerLength = header.length();
-        int beginIndex = renderedColWidths[head] * chunk;
-
-        if (beginIndex < headerLength) {
-          chunkedHeaders[head][chunk] = header.substring(
-              beginIndex,
-              Math.min(headerLength, renderedColWidths[head] * (chunk + 1)));
-        } else {
-          chunkedHeaders[head][chunk] = view.headerUI().getSpace() + "";
-        }
+        Object header = model.headerAt(head);
+        String headerString = header == null ? "" : header.toString();
+        chunkText(headerString, chunk, chunkedHeaders[head], renderedColWidths[head], view.headerUI());
       }
     }
+  }
+
+  private void chunkText(String text, int chunk, String[] chunkedArray, int renderedColWidth, GridUI ui) {
+      int textLength = text.length();
+      int beginIndex = renderedColWidth * chunk;
+
+      if (beginIndex < textLength) {
+          chunkedArray[chunk] = text.substring(
+                  beginIndex,
+                  Math.min(textLength, renderedColWidth * (chunk + 1)));
+      } else {
+          chunkedArray[chunk] = ui.getSpace() + "";
+      }
   }
 
   private void printTopDividerLine(GridUI gridUI) {
