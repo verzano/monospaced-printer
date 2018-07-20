@@ -1,14 +1,17 @@
 package com.verzano.terminalprinter;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.PrintStream;
 
-@Getter
-@Setter
 public abstract class TerminalPrinter {
   private PrintStream printer;
+
+  public PrintStream getPrinter() {
+    return printer;
+  }
+
+  public void setPrinter(PrintStream printer) {
+    this.printer = printer;
+  }
 
   public abstract void print();
 

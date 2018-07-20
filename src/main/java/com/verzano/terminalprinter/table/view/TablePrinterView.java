@@ -5,10 +5,7 @@ import com.verzano.terminalprinter.metrics.Size;
 import com.verzano.terminalprinter.table.model.TablePrinterModel;
 import com.verzano.terminalprinter.table.view.ui.GridUI;
 import com.verzano.terminalprinter.table.view.ui.TableUI;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
 public class TablePrinterView {
   private TablePrinterModel model;
 
@@ -20,13 +17,10 @@ public class TablePrinterView {
   private Size[] minHeaderSizes;
   private Size[] maxHeaderSizes;
 
-  @Setter
   private Expansion expansion;
 
-  @Setter
   private boolean showHeaders;
 
-  @Setter
   private boolean showTitle;
 
   private Padding pads;
@@ -109,6 +103,58 @@ public class TablePrinterView {
     this.showTitle = showTitle;
 
     this.pads = pads == null ? new Padding(0, 0, 0, 0) : pads;
+  }
+
+  public TablePrinterModel getModel() {
+    return model;
+  }
+
+  public TableUI getTableUI() {
+    return tableUI;
+  }
+
+  public Size[][] getMinSizes() {
+    return minSizes;
+  }
+
+  public Size[][] getMaxSizes() {
+    return maxSizes;
+  }
+
+  public Size[] getMinHeaderSizes() {
+    return minHeaderSizes;
+  }
+
+  public Size[] getMaxHeaderSizes() {
+    return maxHeaderSizes;
+  }
+
+  public Expansion getExpansion() {
+    return expansion;
+  }
+
+  public void setExpansion(Expansion expansion) {
+    this.expansion = expansion;
+  }
+
+  public boolean isShowHeaders() {
+    return showHeaders;
+  }
+
+  public void setShowHeaders(boolean showHeaders) {
+    this.showHeaders = showHeaders;
+  }
+
+  public boolean isShowTitle() {
+    return showTitle;
+  }
+
+  public void setShowTitle(boolean showTitle) {
+    this.showTitle = showTitle;
+  }
+
+  public Padding getPads() {
+    return pads;
   }
 
   public int maxHeightAt(int row, int col) {
