@@ -1,12 +1,11 @@
 package com.verzano.monospaced.printer.table.model.ansi;
 
-import static com.verzano.monospaced.printer.table.model.ansi.AnsiCodes.CLEAR;
-import static com.verzano.monospaced.printer.table.model.ansi.AnsiCodes.generateCode;
-
 import com.verzano.monospaced.printer.table.model.TablePrinterModel;
 
+// TODO fix the attributes
 // TODO to make this work right may need to add a 'renderedDataAt' and 'renderedDataWidth'....
 public class AnsiTablePrinterModel implements TablePrinterModel {
+
   private TablePrinterModel decoratedModel;
   private String[][] attributes;
   private String[][] foregrounds;
@@ -25,9 +24,7 @@ public class AnsiTablePrinterModel implements TablePrinterModel {
 
   @Override
   public Object dataAt(int row, int col) {
-    return generateCode(attributes[row][col], foregrounds[row][col], backgrounds[row][col])
-        + decoratedModel.dataAt(row, col)
-        + CLEAR;
+    return decoratedModel.dataAt(row, col);
   }
 
   @Override
