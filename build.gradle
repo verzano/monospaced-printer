@@ -11,4 +11,7 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    // TODO replace this with actual mavenCentral jar
+    compile files('libs/monospaced-core-0.1.0.jar')
 }

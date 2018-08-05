@@ -1,11 +1,11 @@
 package com.verzano.monospaced.printer.chart;
 
-import com.verzano.monospaced.printer.TerminalPrinter;
+import com.verzano.monospaced.printer.Printer;
 import com.verzano.monospaced.printer.chart.model.ChartPrinterModel;
 import com.verzano.monospaced.printer.chart.view.ChartPrinterView;
 import java.io.PrintStream;
 
-public class ChartPrinter extends TerminalPrinter {
+public class ChartPrinter extends Printer {
   private ChartPrinterModel model;
 
   private ChartPrinterView view;

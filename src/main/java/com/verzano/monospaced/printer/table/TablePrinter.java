@@ -1,6 +1,6 @@
 package com.verzano.monospaced.printer.table;
 
-import com.verzano.monospaced.printer.TerminalPrinter;
+import com.verzano.monospaced.printer.Printer;
 import com.verzano.monospaced.printer.metrics.Size;
 import com.verzano.monospaced.printer.table.model.DefaultTablePrinterModel;
 import com.verzano.monospaced.printer.table.model.TablePrinterModel;
@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 // TODO add setters/getters and organize them
 // TODO combine some of the similar drawing logic
 // TODO add a configurable default for null
-public class TablePrinter extends TerminalPrinter {
+public class TablePrinter extends Printer {
   private TablePrinterModel model;
 
   private TablePrinterView view;

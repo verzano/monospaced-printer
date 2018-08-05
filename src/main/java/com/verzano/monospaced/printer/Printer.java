@@ -2,7 +2,7 @@ package com.verzano.monospaced.printer;
 
 import java.io.PrintStream;
 
-public abstract class TerminalPrinter {
+public abstract class Printer {
   private PrintStream printer;
 
   public PrintStream getPrinter() {
@@ -15,7 +15,7 @@ public abstract class TerminalPrinter {
 
   public abstract void print();
 
-  public TerminalPrinter(PrintStream printer) {
+  public Printer(PrintStream printer) {
     this.printer = printer == null ? System.out : printer;
   }
   
